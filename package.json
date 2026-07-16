@@ -1,0 +1,18 @@
+{
+  "name": "vrairconditionersalesandservice",
+  "version": "1.0.0",
+  "description": "VR Store — O General Exclusive AC Showroom",
+  "scripts": {
+    "test": "echo \"No tests configured\" && exit 0"
+  },
+  "keywords": [
+    "air-conditioner",
+    "o-general",
+    "showroom"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@vercel/speed-insights": "^1.0.14"
+  }
+}
