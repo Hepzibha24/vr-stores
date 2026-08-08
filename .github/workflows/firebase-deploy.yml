@@ -25,6 +25,16 @@ jobs:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT }}
 
       - name: Deploy to Firebase Hosting
-        run: firebase deploy --only hosting --project vr-stores-9403d --non-interactive
+        run: |
+          set +e
+          firebase deploy --only hosting --project vr-stores-9403d --non-interactive --debug > /tmp/deploy_output.txt 2>&1
+          EXIT_CODE=$?
+          {
+            echo "## Firebase Deploy Output (exit code: $EXIT_CODE)"
+            echo '```'
+            tail -c 60000 /tmp/deploy_output.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          exit $EXIT_CODE
         env:
           GOOGLE_APPLICATION_CREDENTIALS: /tmp/gcp-key.json
