@@ -165,24 +165,15 @@ EmailJS' free tier is 200 emails/month, well clear of normal traffic for this si
 
 ## Deploying
 
-[.github/workflows/deploy-pages.yml](.github/workflows/deploy-pages.yml) builds and
-publishes to **GitHub Pages** on every push to `main`. It needs one setting, once:
-**Settings → Pages → Source → GitHub Actions**. The site then lives at
-https://hepzibha24.github.io/vr-stores/
+The live site is **https://vrstores.in**, built and served by **Vercel** from this repository:
+every push to `main` deploys. Vercel serves from the domain root and rewrites unknown paths to
+`index.html`, so `/admin` and the other client-side routes return a real 200 — see
+[vercel.json](vercel.json).
 
-Pages serves from `/vr-stores/` rather than the domain root, so the workflow sets
-`VITE_BASE`; see the base-path notes in that file. It also copies `index.html` to `404.html`,
-because Pages has no rewrite rules and a refresh on `/admin` would otherwise 404.
+### Environment variables live in Vercel, not in the repo
 
-[netlify.toml](netlify.toml) and [vercel.json](vercel.json) are committed as alternatives.
-Both serve from the domain root, so they need no base path and use a real rewrite rule —
-worth switching to if you ever make the repository private, since Pages then requires a paid
-plan.
-
-### Environment variables
-
-Whichever host, add the same values from your `.env` in the host's dashboard, because Vite
-inlines `VITE_*` at build time:
+Vite inlines `VITE_*` at build time, so they have to be present when Vercel builds. Add them
+under **Project → Settings → Environment Variables**, then redeploy:
 
 ```
 VITE_SUPABASE_URL          VITE_EMAILJS_SERVICE_ID     VITE_CALLMEBOT_APIKEY
@@ -190,25 +181,16 @@ VITE_SUPABASE_KEY          VITE_EMAILJS_TEMPLATE_ID    VITE_CALLMEBOT_PHONE
                            VITE_EMAILJS_PUBLIC_KEY
 ```
 
-Any that are missing just switch that feature off in the deployed build — the site still
-works and still records enquiries locally.
+Anything missing switches that feature off in the deployed build: no Supabase means each
+browser keeps its own copy of the data, no EmailJS means enquiries are recorded but not
+emailed. **Do not set `VITE_BASE`** — that exists only for the GitHub Pages fallback.
 
-**Do not set `VITE_BASE`** on Netlify or Vercel. It exists only for GitHub Pages, which
-serves from a subpath; these hosts serve from the root, where the default `/` is correct.
+### The GitHub Pages workflow
 
-### Once it is live
-
-The site is reachable by anyone with the URL, `/admin` included. The portal password is a
-browser-side lock, not real protection, so change it from the shipped default via
-**Admin → Change Password** before sharing the link.
-
-## Pages
-
-The public site is a single page at `/` — hero, services, technicians, AMC, brands, timings
-and contact, with the enquiry and booking forms in place. `/admin/*` is the admin portal.
-
-The header carries no navigation links, since there is only one page: just the brand and the
-Call Now button. Unknown paths redirect to `/`.
+[.github/workflows/deploy-pages.yml](.github/workflows/deploy-pages.yml) still works but is
+manual-only, so it does not publish a second copy of the site competing with vrstores.in in
+search results. Uncomment its `push` trigger to bring it back.
+[netlify.toml](netlify.toml) is there as another alternative.
 
 ## Search visibility
 
@@ -229,10 +211,9 @@ that is where a showroom's traffic comes from.
 
 ### These URLs are hardcoded
 
-Canonical, Open Graph and sitemap URLs point at the GitHub Pages address. **When vrstores.in
-goes live, change them** — in `index.html` (canonical, `og:url`, `og:image`, and the three
-URLs inside the JSON-LD), `public/robots.txt` and `public/sitemap.xml`. Leaving them pointing
-elsewhere tells Google the real site is the old address.
+Canonical, Open Graph, JSON-LD and sitemap URLs all name `https://vrstores.in`. If the domain
+ever changes, they need updating together — in `index.html` (canonical, `og:url`, `og:image`
+and three URLs inside the JSON-LD), `public/robots.txt` and `public/sitemap.xml`.
 
 ### What the code cannot do
 

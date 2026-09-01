@@ -7,4 +7,4 @@ Allow: /
 Disallow: /admin
 Disallow: /invoice-generator.html
 
-Sitemap: https://hepzibha24.github.io/vr-stores/sitemap.xml
+Sitemap: https://vrstores.in/sitemap.xml

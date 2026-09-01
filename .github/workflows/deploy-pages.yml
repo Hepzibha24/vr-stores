@@ -1,8 +1,13 @@
 name: Build and deploy to GitHub Pages
 
 on:
-  push:
-    branches: [main]
+  # Manual only. The live site is vrstores.in, served from Vercel; deploying
+  # Pages on every push would put a second copy of the same content at
+  # hepzibha24.github.io/vr-stores/, competing with the real one in search.
+  # Kept as a fallback — uncomment the push trigger to bring it back.
+  #
+  #   push:
+  #     branches: [main]
   workflow_dispatch:
 
 # Allow the workflow to publish to Pages.
