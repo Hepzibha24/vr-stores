@@ -9,7 +9,8 @@
 .hero-bg {
   position: absolute;
   inset: 0;
-  background-image: url('/hero-bg.jpg');
+  /* The image itself is set inline in Hero.jsx, because CSS cannot read
+     Vite's base path and this deploys under a subpath on GitHub Pages. */
   background-size: cover;
   background-position: center;
   opacity: 0.22;

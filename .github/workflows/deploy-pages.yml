@@ -1,0 +1,71 @@
+name: Build and deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Allow the workflow to publish to Pages.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Never let two deploys race; queue instead, and let a running one finish.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - run: npm ci
+
+      # Vite inlines VITE_* at build time, so these come from repository
+      # secrets rather than the runtime environment. Any that are missing just
+      # switch that feature off: no Supabase means localStorage only, no
+      # EmailJS means enquiries are still recorded but not emailed.
+      #
+      # VITE_BASE matters: Pages serves this at /<repo>/, not the domain root,
+      # so the bundle and the router both need to know the subpath. Change it
+      # to '/' if you ever put this on a custom domain.
+      - name: Build
+        run: npm run build
+        env:
+          VITE_BASE: /vr-stores/
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_KEY: ${{ secrets.VITE_SUPABASE_KEY }}
+          VITE_EMAILJS_SERVICE_ID: ${{ secrets.VITE_EMAILJS_SERVICE_ID }}
+          VITE_EMAILJS_TEMPLATE_ID: ${{ secrets.VITE_EMAILJS_TEMPLATE_ID }}
+          VITE_EMAILJS_PUBLIC_KEY: ${{ secrets.VITE_EMAILJS_PUBLIC_KEY }}
+          VITE_CALLMEBOT_APIKEY: ${{ secrets.VITE_CALLMEBOT_APIKEY }}
+          VITE_CALLMEBOT_PHONE: ${{ secrets.VITE_CALLMEBOT_PHONE }}
+
+      # Pages has no rewrite rules, so a refresh on /admin would 404. It does
+      # serve 404.html for unknown paths, and since that is the same SPA the
+      # router picks the route up from the URL and renders it.
+      - name: Add SPA fallback
+        run: cp dist/index.html dist/404.html
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

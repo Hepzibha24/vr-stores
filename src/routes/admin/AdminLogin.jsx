@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { isAuthenticated, login } from '../../data/auth'
 import useFavicon from '../../components/admin/useFavicon'
+import { asset } from '../../lib/asset'
 import '../../components/admin/admin.css'
 
 export default function AdminLogin() {
@@ -13,7 +14,7 @@ export default function AdminLogin() {
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
 
-  useFavicon('/admin-mark.svg')
+  useFavicon(asset('admin-mark.svg'))
 
   // Web Crypto (used to hash the password) is unavailable on plain http://
   // outside localhost, which would make every login fail for no visible reason.

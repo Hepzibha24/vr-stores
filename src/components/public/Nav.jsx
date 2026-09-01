@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
+import { asset } from '../../lib/asset'
 import './Nav.css'
 
 const LINKS = [
@@ -18,7 +19,7 @@ export default function Nav() {
     <nav className="site-nav">
       {/* The logo is the way in to the admin portal. */}
       <Link className="nav-logo" to="/admin" title="Open the admin portal" aria-label="Open the admin portal">
-        <img src="/logo.jpg" alt="VR Store logo" />
+        <img src={asset('logo.jpg')} alt="VR Store logo" />
         <span>VR STORE</span>
       </Link>
 

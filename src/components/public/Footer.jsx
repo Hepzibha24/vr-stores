@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useServices } from '../../data/StoreContext'
+import { asset } from '../../lib/asset'
 import './Footer.css'
 
 export default function Footer() {
@@ -10,7 +11,7 @@ export default function Footer() {
       <div className="footer-top">
         <div className="footer-brand">
           <Link to="/admin" title="Open the admin portal">
-            <img src="/logo.jpg" alt="VR Store logo" />
+            <img src={asset('logo.jpg')} alt="VR Store logo" />
           </Link>
           <p>
             O General Exclusive Authorised AC Showroom. Trusted sales, installation &amp; service in

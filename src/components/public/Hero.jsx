@@ -1,9 +1,10 @@
+import { asset } from '../../lib/asset'
 import './Hero.css'
 
 export default function Hero() {
   return (
     <section className="hero">
-      <div className="hero-bg" />
+      <div className="hero-bg" style={{ backgroundImage: `url(${asset('hero-bg.jpg')})` }} />
       <div className="hero-accent" />
       <div className="hero-content">
         <div className="hero-tag">

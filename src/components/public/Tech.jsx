@@ -1,3 +1,4 @@
+import { asset } from '../../lib/asset'
 import './Tech.css'
 
 const POINTS = [
@@ -13,7 +14,7 @@ export default function Tech() {
       <div className="container">
         <div className="tech-section">
           <div className="tech-img">
-            <img src="/technician.jpg" alt="VR Store technician servicing an air conditioner" />
+            <img src={asset('technician.jpg')} alt="VR Store technician servicing an air conditioner" />
             <div className="tech-img-overlay" />
           </div>
           <div className="tech-content">

@@ -1,3 +1,5 @@
+import { asset } from '../../lib/asset'
+
 const ENGINEERS = [
   {
     name: 'Mr. R. Karthikeyan',
@@ -31,7 +33,7 @@ export default function AboutPage() {
             <i className="ti ti-users" /> 1000+ Happy Customers
           </div>
           <div className="about-photo">
-            <img src="/showroom-about.png" alt="Inside the VR Store O General showroom" />
+            <img src={asset('showroom-about.png')} alt="Inside the VR Store O General showroom" />
           </div>
         </aside>
 

@@ -3,6 +3,7 @@ import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-do
 import { currentUser, logout } from '../../data/auth'
 import { useEnquiries, useSync } from '../../data/StoreContext'
 import useFavicon from './useFavicon'
+import { asset } from '../../lib/asset'
 import SyncBadge from './SyncBadge'
 import './admin.css'
 
@@ -26,7 +27,7 @@ export default function AdminLayout() {
   const sync = useSync()
   const badges = { newEnquiries: enquiries.filter((e) => e.status === 'New').length }
 
-  useFavicon('/admin-mark.svg')
+  useFavicon(asset('admin-mark.svg'))
 
   // Close the mobile drawer whenever the route changes.
   useEffect(() => setMenuOpen(false), [location.pathname])
@@ -40,7 +41,7 @@ export default function AdminLayout() {
     <div className="admin-shell">
       <aside className={`admin-sidebar${menuOpen ? ' open' : ''}`}>
         <div className="admin-brand">
-          <img src="/vr-mark.svg" alt="" />
+          <img src={asset('vr-mark.svg')} alt="" />
           <div className="admin-brand-text">
             <strong>VR STORE</strong>
             <span>Admin Portal</span>

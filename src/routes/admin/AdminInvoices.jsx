@@ -1,3 +1,5 @@
+import { asset } from '../../lib/asset'
+
 import { supabaseConfigured, syncInvoiceSupabaseConfig } from '../../data/supabaseBridge'
 
 /**
@@ -25,7 +27,7 @@ export default function AdminInvoices() {
         </div>
         <a
           className="btn btn-ghost"
-          href="/invoice-generator.html"
+          href={asset('invoice-generator.html')}
           target="_blank"
           rel="noreferrer"
         >
@@ -48,7 +50,7 @@ export default function AdminInvoices() {
       )}
 
       <div className="admin-embed">
-        <iframe src="/invoice-generator.html" title="VR Store GST Invoice and Billing System" />
+        <iframe src={asset('invoice-generator.html')} title="VR Store GST Invoice and Billing System" />
       </div>
     </>
   )
