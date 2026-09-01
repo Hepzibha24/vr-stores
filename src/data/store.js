@@ -44,6 +44,7 @@ import {
   SEED_ANALYTICS,
   SEED_PRODUCTS,
   SEED_AMC_PRICING,
+  SEED_REVIEWS,
 } from './seed'
 import {
   patchBooking,
@@ -97,6 +98,7 @@ function freshDocument() {
     analytics: SEED_ANALYTICS,
     products: SEED_PRODUCTS,
     amcPricing: SEED_AMC_PRICING,
+    reviews: SEED_REVIEWS,
   }
 }
 
@@ -121,6 +123,7 @@ function readStorage() {
     }
     // Added after the first release; fill in rather than discarding the document.
     if (!Array.isArray(parsed.products)) parsed.products = SEED_PRODUCTS
+    if (!Array.isArray(parsed.reviews)) parsed.reviews = SEED_REVIEWS
     if (!parsed.amcPricing) parsed.amcPricing = SEED_AMC_PRICING
     return parsed
   } catch {
@@ -236,7 +239,7 @@ export async function syncFromCloud({ force = false } = {}) {
     if (result.bookings) next.bookings = mergeById(result.bookings, doc.bookings)
     // Content is authoritative from the cloud only once it has been saved
     // there; an empty array means "never configured", so keep the local copy.
-    for (const field of ['services', 'brands', 'amcPlans']) {
+    for (const field of ['services', 'brands', 'amcPlans', 'reviews']) {
       const rows = result.content?.[field]
       if (Array.isArray(rows) && rows.length) next[field] = rows
     }
@@ -564,6 +567,37 @@ export function updateProduct(id, patch) {
 export function deleteProduct(id) {
   commit((doc) => ({ products: doc.products.filter((p) => p.id !== id) }))
   mirror(() => removeProduct(id))
+}
+
+/* ── Reviews ───────────────────────────────────────────────────────────── */
+
+export function getReviews() {
+  return ensure().reviews
+}
+
+export function addReview({ name, rating = 5, text = '', source = 'Google' }) {
+  const record = {
+    id: uid('rev'),
+    name: name.trim(),
+    rating: Math.min(5, Math.max(1, Number(rating) || 5)),
+    text: text.trim(),
+    source,
+  }
+  commit((doc) => ({ reviews: [...doc.reviews, record] }))
+  mirrorContent('reviews')
+  return record
+}
+
+export function updateReview(id, patch) {
+  commit((doc) => ({
+    reviews: doc.reviews.map((r) => (r.id === id ? { ...r, ...patch, id } : r)),
+  }))
+  mirrorContent('reviews')
+}
+
+export function deleteReview(id) {
+  commit((doc) => ({ reviews: doc.reviews.filter((r) => r.id !== id) }))
+  mirrorContent('reviews')
 }
 
 /* ── AMC pricing (drives the public estimator) ─────────────────────────── */

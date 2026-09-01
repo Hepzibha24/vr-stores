@@ -21,6 +21,7 @@ const CONTENT_KEYS = {
   services: 'site_services',
   brands: 'site_brands',
   amcPlans: 'site_amc_plans',
+  reviews: 'site_reviews',
 }
 
 // PostgREST: upsert on primary-key conflict, and do not echo the row back.

@@ -7,6 +7,7 @@ import Services from '../components/public/Services'
 import Tech from '../components/public/Tech'
 import AMC from '../components/public/AMC'
 import Brands from '../components/public/Brands'
+import Reviews from '../components/public/Reviews'
 import Timings from '../components/public/Timings'
 import Contact from '../components/public/Contact'
 import Footer from '../components/public/Footer'
@@ -27,6 +28,7 @@ export default function PublicSite() {
       <Tech />
       <AMC />
       <Brands />
+      <Reviews />
       <Timings />
       <Contact />
       <Footer />

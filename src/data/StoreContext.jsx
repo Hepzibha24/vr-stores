@@ -33,4 +33,5 @@ export const useAmcPlans = () => useStore().amcPlans
 export const useEnquiries = () => useStore().enquiries
 export const useBookings = () => useStore().bookings
 export const useAnalytics = () => useStore().analytics
+export const useReviews = () => useStore().reviews
 export const useSync = () => useStore().sync

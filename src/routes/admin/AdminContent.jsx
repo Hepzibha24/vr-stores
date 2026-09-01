@@ -1,7 +1,10 @@
 import { useState } from 'react'
-import { useAmcPlans, useBrands, useServices } from '../../data/StoreContext'
+import { useAmcPlans, useBrands, useReviews, useServices } from '../../data/StoreContext'
 import {
   addAmcPlan,
+  addReview,
+  deleteReview,
+  updateReview,
   addBrand,
   addService,
   deleteAmcPlan,
@@ -17,6 +20,7 @@ const TABS = [
   { key: 'services', label: 'Services' },
   { key: 'brands', label: 'Brands' },
   { key: 'amc', label: 'AMC Plans' },
+  { key: 'reviews', label: 'Reviews' },
 ]
 
 // A short menu of Tabler icons that suit an AC showroom, so the admin does not
@@ -64,6 +68,7 @@ export default function AdminContent() {
       {tab === 'services' && <ServicesPanel />}
       {tab === 'brands' && <BrandsPanel />}
       {tab === 'amc' && <AmcPanel />}
+      {tab === 'reviews' && <ReviewsPanel />}
 
       <div className="panel">
         <div className="panel-head">
@@ -464,6 +469,142 @@ function AmcPanel() {
                 className="btn btn-danger btn-sm"
                 type="button"
                 onClick={() => window.confirm(`Delete “${p.title}”?`) && deleteAmcPlan(p.id)}
+              >
+                <i className="ti ti-trash" /> Delete
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+/* ── Reviews ───────────────────────────────────────────────────────────── */
+
+const EMPTY_REVIEW = { name: '', rating: '5', text: '', source: 'Google' }
+
+function ReviewsPanel() {
+  const reviews = useReviews()
+  const [editingId, setEditingId] = useState(null)
+  const [draft, setDraft] = useState(EMPTY_REVIEW)
+  const [error, setError] = useState('')
+
+  const set = (field) => (e) => setDraft((d) => ({ ...d, [field]: e.target.value }))
+
+  function startAdd() {
+    setEditingId('new')
+    setDraft(EMPTY_REVIEW)
+    setError('')
+  }
+
+  function startEdit(r) {
+    setEditingId(r.id)
+    setDraft({ name: r.name, rating: String(r.rating), text: r.text, source: r.source || 'Google' })
+    setError('')
+  }
+
+  function save(e) {
+    e.preventDefault()
+    if (!draft.name.trim()) {
+      setError('Enter the reviewer’s name.')
+      return
+    }
+    if (!draft.text.trim()) {
+      setError('Enter what they said.')
+      return
+    }
+    if (editingId === 'new') addReview(draft)
+    else updateReview(editingId, { ...draft, rating: Number(draft.rating) })
+    setEditingId(null)
+  }
+
+  return (
+    <div className="panel">
+      <div className="panel-head">
+        <div>
+          <h2>Customer reviews</h2>
+          <p>
+            Shown on the home page. The section stays hidden until there is at least one, so an
+            empty list simply means no reviews block appears.
+          </p>
+        </div>
+        <button type="button" className="btn btn-primary" onClick={startAdd}>
+          <i className="ti ti-plus" /> Add review
+        </button>
+      </div>
+
+      {reviews.length === 0 && !editingId && (
+        <div className="notice">
+          <i className="ti ti-quote" />
+          <div>
+            <strong>No reviews yet</strong>
+            <p>
+              Copy real ones across from your Google Business Profile rather than writing them
+              yourself — these are quotes attributed to named customers, and invented ones would
+              mislead the people reading them.
+            </p>
+          </div>
+        </div>
+      )}
+
+      {editingId && (
+        <form className="form-grid" onSubmit={save} style={{ marginBottom: '1.25rem' }}>
+          <div className="field">
+            <label htmlFor="rv-name">Customer name</label>
+            <input id="rv-name" value={draft.name} onChange={set('name')} autoFocus />
+          </div>
+          <div className="field">
+            <label htmlFor="rv-rating">Rating</label>
+            <select id="rv-rating" value={draft.rating} onChange={set('rating')}>
+              {[5, 4, 3, 2, 1].map((n) => (
+                <option key={n} value={n}>
+                  {n} star{n === 1 ? '' : 's'}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="field">
+            <label htmlFor="rv-source">Source</label>
+            <input id="rv-source" value={draft.source} onChange={set('source')} placeholder="Google" />
+          </div>
+          <div className="field full">
+            <label htmlFor="rv-text">What they said</label>
+            <textarea id="rv-text" rows={3} value={draft.text} onChange={set('text')} />
+          </div>
+          {error && <p className="form-error">{error}</p>}
+          <div className="form-actions">
+            <button className="btn btn-primary" type="submit">
+              <i className="ti ti-check" /> {editingId === 'new' ? 'Add review' : 'Save changes'}
+            </button>
+            <button className="btn btn-ghost" type="button" onClick={() => setEditingId(null)}>
+              Cancel
+            </button>
+          </div>
+        </form>
+      )}
+
+      <div className="item-list">
+        {reviews.map((r) => (
+          <div className="item-row" key={r.id}>
+            <div className="item-icon">
+              <i className="ti ti-quote" />
+            </div>
+            <div className="item-body">
+              <h3>
+                {r.name}
+                <span className="tag-featured">{r.rating}★</span>
+              </h3>
+              <p>{r.text}</p>
+            </div>
+            <div className="item-actions">
+              <button className="btn btn-ghost btn-sm" type="button" onClick={() => startEdit(r)}>
+                <i className="ti ti-pencil" /> Edit
+              </button>
+              <button
+                className="btn btn-danger btn-sm"
+                type="button"
+                onClick={() => window.confirm(`Delete the review from ${r.name}?`) && deleteReview(r.id)}
               >
                 <i className="ti ti-trash" /> Delete
               </button>

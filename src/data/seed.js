@@ -132,3 +132,10 @@ export const SEED_AMC_PRICING = {
   cassette_surcharge: 500,
   comprehensive_multiplier: 2,
 }
+
+// ── Customer reviews (Admin → Site Content → Reviews) ────────────────────
+// Deliberately empty. These are testimonials attributed to real named people,
+// so inventing them would put words in customers' mouths on a live business
+// site. Paste the genuine ones from the Google Business Profile instead; the
+// public section stays hidden until at least one exists.
+export const SEED_REVIEWS = []

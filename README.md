@@ -243,6 +243,25 @@ customer reviews. That, plus the custom domain, will matter more than everything
 section combined. Submitting the sitemap in Google Search Console is worth the ten minutes
 it takes.
 
+## Reviews
+
+**Admin → Site Content → Reviews.** They appear on the home page between the brands strip and
+the store timings.
+
+The list ships **empty on purpose**, and the public section stays hidden until there is at
+least one — an empty testimonials block looks worse than none at all. These are quotes
+attributed to named customers, so they were not written for you: copy the real ones across
+from the Google Business Profile.
+
+Two notes if you add them:
+
+- Review **schema markup** was deliberately left out. Star ratings in search results have to
+  come from genuine, verifiable reviews; marking up self-entered ones risks a manual penalty
+  from Google. Once there is a Business Profile with real reviews, Google surfaces those
+  itself — no markup needed.
+- Reviews sync through the same `settings` row mechanism as services and brands, so they need
+  the database sign-in before they will reach other devices.
+
 ## Admin sections
 
 Dashboard · Enquiries · AMC & Bookings · Site Content · AMC Pricing · Invoice Generator ·
