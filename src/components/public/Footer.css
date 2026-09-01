@@ -1,0 +1,79 @@
+/* Scoped for the same reason as .site-nav — no bare element selectors that
+   could reach into the admin portal. */
+footer.site-footer {
+  background: #0d0d0d;
+  padding: 3rem 2rem 2rem;
+}
+.footer-top {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr;
+  gap: 40px;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.footer-brand img {
+  height: 44px;
+  margin-bottom: 1rem;
+}
+.footer-brand p {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.8;
+  max-width: 260px;
+}
+.footer-col h4 {
+  font-size: 13px;
+  font-weight: 700;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 1rem;
+}
+.footer-col ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.footer-col ul li {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.5);
+}
+.footer-col ul li a {
+  color: rgba(255, 255, 255, 0.5);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.footer-col ul li a:hover {
+  color: white;
+}
+.footer-bottom {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding-top: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.footer-bottom p {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.35);
+}
+.footer-admin {
+  color: rgba(255, 255, 255, 0.55);
+  text-decoration: none;
+  font-weight: 600;
+}
+.footer-admin:hover {
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .footer-top {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,35 @@
+import { useEffect } from 'react'
+import { recordVisit } from '../data/store'
+import Nav from '../components/public/Nav'
+import Hero from '../components/public/Hero'
+import Ticker from '../components/public/Ticker'
+import Services from '../components/public/Services'
+import Tech from '../components/public/Tech'
+import AMC from '../components/public/AMC'
+import Brands from '../components/public/Brands'
+import Timings from '../components/public/Timings'
+import Contact from '../components/public/Contact'
+import Footer from '../components/public/Footer'
+
+export default function PublicSite() {
+  // Lightweight visit counter feeding the admin analytics view. Deduped per
+  // browser tab session inside recordVisit().
+  useEffect(() => {
+    recordVisit()
+  }, [])
+
+  return (
+    <>
+      <Nav />
+      <Hero />
+      <Ticker />
+      <Services />
+      <Tech />
+      <AMC />
+      <Brands />
+      <Timings />
+      <Contact />
+      <Footer />
+    </>
+  )
+}

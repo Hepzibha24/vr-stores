@@ -1,0 +1,42 @@
+.ticker {
+  background: var(--red);
+  overflow: hidden;
+  padding: 12px 0;
+  white-space: nowrap;
+}
+.ticker-inner {
+  display: inline-flex;
+  gap: 48px;
+  animation: scroll 20s linear infinite;
+}
+@keyframes scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.ticker-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 48px;
+}
+.ticker-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: white;
+  letter-spacing: 0.5px;
+}
+.ticker-dot {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ticker-inner {
+    animation: none;
+  }
+}

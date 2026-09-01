@@ -1,0 +1,217 @@
+.amc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+  margin-top: 3rem;
+}
+.amc-card {
+  background: white;
+  border: 1px solid #eee;
+  border-radius: 16px;
+  padding: 2rem;
+  transition: transform 0.25s, box-shadow 0.25s;
+}
+.amc-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
+}
+.amc-card.featured {
+  background: var(--red);
+  border-color: var(--red);
+}
+.amc-card .amc-icon {
+  font-size: 32px;
+  color: var(--red);
+  margin-bottom: 1rem;
+}
+.amc-card.featured .amc-icon {
+  color: rgba(255, 255, 255, 0.8);
+}
+.amc-card h3 {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+.amc-card.featured h3 {
+  color: white;
+}
+.amc-card p {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.amc-card.featured p {
+  color: rgba(255, 255, 255, 0.8);
+}
+.amc-price {
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--red);
+  margin-bottom: 8px;
+}
+.amc-card.featured .amc-price {
+  color: white;
+}
+.amc-features {
+  list-style: none;
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.amc-features li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.amc-features li i {
+  color: var(--red);
+  font-size: 15px;
+}
+.amc-card.featured .amc-features li {
+  color: rgba(255, 255, 255, 0.85);
+}
+.amc-card.featured .amc-features li i {
+  color: white;
+}
+
+/* ── Booking form ── */
+.amc-book {
+  margin-top: 3rem;
+  border: 1px solid #eee;
+  border-radius: 16px;
+  padding: 2rem;
+  background: var(--off-white);
+}
+.amc-book-head h3 {
+  font-size: 19px;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.amc-book-head p {
+  font-size: 13px;
+  color: var(--muted);
+}
+.amc-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-top: 1.75rem;
+}
+.amc-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.amc-field label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: 0.3px;
+}
+.amc-field input,
+.amc-field select {
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--text);
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 11px 12px;
+}
+.amc-field input:focus,
+.amc-field select:focus {
+  border-color: var(--red);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(204, 0, 0, 0.12);
+}
+.amc-error {
+  grid-column: 1 / -1;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--red-dark);
+}
+.amc-submit {
+  grid-column: 1 / -1;
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--red);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 14px 26px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+.amc-submit:hover {
+  background: var(--red-dark);
+  transform: translateY(-2px);
+}
+.amc-submit i {
+  font-size: 18px;
+}
+.amc-sent {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+  background: white;
+  border: 1px solid #d7ecd9;
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+}
+.amc-sent > i {
+  font-size: 30px;
+  color: #2e7d32;
+}
+.amc-sent div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.amc-sent strong {
+  font-size: 15px;
+  color: var(--text);
+}
+.amc-sent span {
+  font-size: 13px;
+  color: var(--muted);
+}
+.amc-again {
+  margin-left: auto;
+  background: none;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 9px 16px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--red);
+  cursor: pointer;
+}
+.amc-again:hover {
+  border-color: var(--red);
+}
+
+@media (max-width: 768px) {
+  .amc-book {
+    padding: 1.5rem 1.25rem;
+  }
+  .amc-submit {
+    justify-self: stretch;
+    justify-content: center;
+  }
+  .amc-again {
+    margin-left: 0;
+  }
+}

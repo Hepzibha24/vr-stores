@@ -1,0 +1,73 @@
+.timings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-top: 2.5rem;
+}
+.timing-card {
+  background: white;
+  border: 1px solid #eee;
+  border-radius: 14px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: box-shadow 0.2s;
+}
+.timing-card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.07);
+}
+.timing-card.closed {
+  opacity: 0.5;
+}
+.timing-icon {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #fff0f0, #ffe0e0);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.timing-icon i {
+  font-size: 22px;
+  color: var(--red);
+}
+.timing-day {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 3px;
+}
+.timing-time {
+  font-size: 13px;
+  color: var(--muted);
+}
+.timing-badge {
+  display: inline-block;
+  background: #e8f5e9;
+  color: #2e7d32;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 10px;
+  margin-top: 4px;
+  letter-spacing: 0.5px;
+}
+.timing-badge.closed-badge {
+  background: #fce4ec;
+  color: #c62828;
+}
+.timing-note {
+  margin-top: 1.5rem;
+  font-size: 13px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.timing-note i {
+  color: var(--red);
+  font-size: 16px;
+}

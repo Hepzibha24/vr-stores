@@ -1,0 +1,131 @@
+/* Scoped to .site-nav rather than a bare `nav` selector — the admin sidebar
+   also uses a <nav>, and a global rule here bled into it. */
+nav.site-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid #eee;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 2rem;
+}
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: opacity 0.2s;
+}
+.nav-logo:hover {
+  opacity: 0.75;
+}
+.nav-logo img {
+  height: 36px;
+}
+.nav-logo span {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--red);
+  letter-spacing: 1px;
+}
+.nav-links {
+  display: flex;
+  gap: 24px;
+}
+.nav-links a {
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  color: #333;
+  transition: color 0.2s;
+}
+.nav-links a:hover {
+  color: var(--red);
+}
+.nav-links a.active {
+  color: var(--red);
+  font-weight: 700;
+}
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.nav-cta {
+  background: var(--red);
+  color: white;
+  border: none;
+  padding: 9px 20px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+.nav-cta:hover {
+  background: var(--red-dark);
+}
+
+/* Mobile menu — the original simply hid the links; this keeps them reachable. */
+.nav-toggle {
+  display: none;
+  background: none;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 6px 8px;
+  cursor: pointer;
+  color: var(--text);
+  line-height: 1;
+}
+.nav-toggle i {
+  font-size: 20px;
+}
+.nav-mobile {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  nav.site-nav {
+    padding: 0.75rem 1.25rem;
+    flex-wrap: wrap;
+  }
+  .nav-links {
+    display: none;
+  }
+  .nav-toggle {
+    display: block;
+  }
+  .nav-mobile {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 2px;
+    padding-top: 0.75rem;
+    margin-top: 0.75rem;
+    border-top: 1px solid #eee;
+  }
+  .nav-mobile a {
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    padding: 10px 4px;
+  }
+  .nav-mobile a.active {
+    color: var(--red);
+    font-weight: 700;
+  }
+  .nav-mobile-cta {
+    margin-top: 6px;
+    background: var(--red);
+    color: white !important;
+    border-radius: 6px;
+    text-align: center;
+    font-weight: 700 !important;
+  }
+}
