@@ -210,6 +210,39 @@ and contact, with the enquiry and booking forms in place. `/admin/*` is the admi
 The header carries no navigation links, since there is only one page: just the brand and the
 Call Now button. Unknown paths redirect to `/`.
 
+## Search visibility
+
+Aimed at local searches — "AC service Urapakkam", "air conditioner repair near me" — since
+that is where a showroom's traffic comes from.
+
+- **Title and description** in [index.html](index.html) lead with the service and the town
+  rather than the brand, because that is what people type.
+- **Structured data** (`HVACBusiness` JSON-LD) carries the address, phone, opening hours,
+  service list and areas served. This is what feeds the local results card with the map and a
+  call button. It is written into the HTML, not injected by React, so crawlers see it without
+  running JavaScript.
+- **A crawlable `<h1>`.** The visible headline is "Cool Your World With Us", which says
+  nothing to a search engine. The real `<h1>` names the service and the place and is
+  visually hidden; the brand line still looks exactly the same.
+- **robots.txt / sitemap.xml** in `public/`, with `/admin` excluded from indexing.
+- **Open Graph tags**, so a link shared on WhatsApp shows the logo and a proper description.
+
+### These URLs are hardcoded
+
+Canonical, Open Graph and sitemap URLs point at the GitHub Pages address. **When vrstores.in
+goes live, change them** — in `index.html` (canonical, `og:url`, `og:image`, and the three
+URLs inside the JSON-LD), `public/robots.txt` and `public/sitemap.xml`. Leaving them pointing
+elsewhere tells Google the real site is the old address.
+
+### What the code cannot do
+
+Markup makes a site *eligible* to rank; it does not make it rank. For "AC service near me"
+the single biggest factor is a **Google Business Profile** — free, at
+business.google.com — with the same name, address and phone as above, real photos and
+customer reviews. That, plus the custom domain, will matter more than everything in this
+section combined. Submitting the sitemap in Google Search Console is worth the ten minutes
+it takes.
+
 ## Admin sections
 
 Dashboard · Enquiries · AMC & Bookings · Site Content · AMC Pricing · Invoice Generator ·

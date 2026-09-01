@@ -82,3 +82,17 @@ body {
     padding: 3.5rem 1.25rem;
   }
 }
+
+/* Present for assistive tech and crawlers, absent visually. Used for the page
+   heading, where the brand line and the descriptive title differ. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

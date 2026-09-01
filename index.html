@@ -1,14 +1,43 @@
 <!doctype html>
-<html lang="en">
+<html lang="en-IN">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="./logo.png" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+
+    <!-- Title leads with what people actually type ("AC service", "AC sales")
+         and the place name, because these searches are overwhelmingly local. -->
+    <title>AC Sales &amp; Service in Urapakkam | VR Store — O General Authorised Dealer</title>
     <meta
       name="description"
-      content="VR Store — O General Exclusive Authorised AC Showroom in Urapakkam. AC sales, installation, repair, deep cleaning and AMC plans."
+      content="Air conditioner sales, installation, repair, gas filling, deep cleaning and AMC in Urapakkam, Chengalpattu. O General exclusive authorised dealer. Same-day AC service, all brands. Call 9940291467."
     />
-    <title>VR Store — O General Exclusive AC Showroom | Urapakkam</title>
+    <link rel="canonical" href="https://hepzibha24.github.io/vr-stores/" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+
+    <!-- Local signals: these help disambiguate which Urapakkam we mean. -->
+    <meta name="geo.region" content="IN-TN" />
+    <meta name="geo.placename" content="Urapakkam, Chengalpattu, Tamil Nadu" />
+    <meta name="geo.position" content="12.86207;80.06134" />
+    <meta name="ICBM" content="12.86207, 80.06134" />
+
+    <!-- How the link looks when shared on WhatsApp, which is where most of
+         this traffic will actually be passed around. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="VR Store" />
+    <meta property="og:locale" content="en_IN" />
+    <meta
+      property="og:title"
+      content="AC Sales &amp; Service in Urapakkam | VR Store — O General Authorised Dealer"
+    />
+    <meta
+      property="og:description"
+      content="Air conditioner sales, installation, repair, gas filling, deep cleaning and AMC in Urapakkam. Same-day service, all brands. Call 9940291467."
+    />
+    <meta property="og:url" content="https://hepzibha24.github.io/vr-stores/" />
+    <meta property="og:image" content="https://hepzibha24.github.io/vr-stores/logo.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -19,6 +48,109 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"
     />
+
+    <!--
+      Structured data. This is what feeds the local results panel — the map
+      card with hours and a call button — for searches like "AC service near
+      me". It is plain HTML rather than injected by React so that crawlers see
+      it without executing JavaScript.
+    -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "HVACBusiness",
+        "@id": "https://hepzibha24.github.io/vr-stores/#business",
+        "name": "VR Store",
+        "alternateName": "VR Store O General Exclusive AC Showroom",
+        "description": "Air conditioner sales, installation, repair, deep cleaning and annual maintenance contracts in Urapakkam, Chengalpattu. O General exclusive authorised dealer servicing all major AC brands.",
+        "url": "https://hepzibha24.github.io/vr-stores/",
+        "logo": "https://hepzibha24.github.io/vr-stores/logo.png",
+        "image": "https://hepzibha24.github.io/vr-stores/logo.png",
+        "telephone": "+919940291467",
+        "email": "vrstores.airconditioner@gmail.com",
+        "priceRange": "₹₹",
+        "currenciesAccepted": "INR",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Plot No. 4, 1st Floor, Door No. 38, Rohini Nagar, Annai Anjugam Nagar",
+          "addressLocality": "Urapakkam West",
+          "addressRegion": "Tamil Nadu",
+          "postalCode": "603211",
+          "addressCountry": "IN"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": 12.86207,
+          "longitude": 80.06134
+        },
+        "hasMap": "https://maps.app.goo.gl/yKGixWLWPscbxBky8",
+        "openingHoursSpecification": [
+          {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": [
+              "Monday",
+              "Tuesday",
+              "Wednesday",
+              "Thursday",
+              "Friday",
+              "Saturday"
+            ],
+            "opens": "09:00",
+            "closes": "20:00"
+          }
+        ],
+        "areaServed": [
+          { "@type": "City", "name": "Urapakkam" },
+          { "@type": "City", "name": "Guduvanchery" },
+          { "@type": "City", "name": "Vandalur" },
+          { "@type": "City", "name": "Chengalpattu" },
+          { "@type": "City", "name": "Chennai" }
+        ],
+        "brand": { "@type": "Brand", "name": "O General" },
+        "makesOffer": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Air Conditioner Sales",
+              "description": "Split, window and cassette air conditioners in all capacities."
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "AC Repair and Diagnostics",
+              "description": "Same-day diagnosis and repair of all air conditioner faults."
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "AC Installation",
+              "description": "Copper piping, mounting, commissioning and balancing by certified technicians."
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "AC Deep Cleaning and Gas Refill",
+              "description": "Coil wash, filter cleaning, drain flush and gas top-up."
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "AC Annual Maintenance Contract",
+              "description": "Annual maintenance contracts for homes, shops and offices."
+            }
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+# The admin portal is not content; keeping it out of the index avoids it
+# turning up in results. This is tidiness, not security — the gate itself is
+# what keeps people out.
+Disallow: /admin
+Disallow: /invoice-generator.html
+
+Sitemap: https://hepzibha24.github.io/vr-stores/sitemap.xml

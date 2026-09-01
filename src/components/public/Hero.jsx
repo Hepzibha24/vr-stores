@@ -11,13 +11,19 @@ export default function Hero() {
           <i className="ti ti-shield-check" style={{ fontSize: 14 }} />
           O General Exclusive Authorised Dealer
         </div>
-        <h1>
+        {/* The visible headline is the brand line; the H1 a crawler reads
+            names the service and the town, which is what people search for. */}
+        <h1 className="sr-only">
+          Air Conditioner Sales, Installation and Service in Urapakkam, Chengalpattu — VR Store,
+          O General Exclusive Authorised Dealer
+        </h1>
+        <div className="hero-headline" aria-hidden="true">
           Cool Your
           <br />
           <span>World</span>
           <br />
           With Us
-        </h1>
+        </div>
         <p>
           Premium AC sales, installation, and service at your doorstep. Urapakkam's most trusted air
           conditioning partner.
