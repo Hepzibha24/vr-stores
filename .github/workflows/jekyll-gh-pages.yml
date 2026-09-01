@@ -2,9 +2,9 @@
 name: Deploy Jekyll with GitHub Pages dependencies preinstalled
 
 on:
-  # Manual only. This repo now builds a React app with Vite and deploys via
-  # firebase-deploy.yml; a Jekyll build of it would fail on every push.
-  # Kept so the GitHub Pages route stays available if it is ever wanted.
+  # Manual only. This repo builds a React app with Vite, so a Jekyll build
+  # of it would fail on every push. Kept so the GitHub Pages route stays
+  # available if it is ever wanted.
   workflow_dispatch:
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
