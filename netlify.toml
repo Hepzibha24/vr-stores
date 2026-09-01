@@ -1,0 +1,31 @@
+# Netlify deploys this on every push to main once the repo is connected.
+# Free tier covers private repositories, unlike GitHub Pages.
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+  # Served from the domain root, so the default base of '/' is correct and
+  # VITE_BASE is deliberately not set here.
+
+# Client-side routing: hand every unknown path to the SPA so a refresh on
+# /admin or /products renders rather than 404s. Real files (assets, the
+# invoice generator) are matched first and served normally.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Hashed filenames never change contents, so they can be cached hard.
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# The entry point must not be cached, or a deploy would not reach anyone.
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "no-cache"

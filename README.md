@@ -163,6 +163,43 @@ two retry independently. **Treat `/admin` as the real inbox and the alerts as no
 
 EmailJS' free tier is 200 emails/month, well clear of normal traffic for this site.
 
+## Deploying
+
+The repository is private, and GitHub Pages needs a paid plan for private
+repositories — so `.github/workflows/deploy-pages.yml` is manual-only. It works as
+written; uncomment its `push` trigger if the repo is ever made public.
+
+For a private repo, connect it to **Netlify** or **Vercel** instead. Both deploy private
+GitHub repositories on their free tiers, both build on every push to `main`, and both serve
+from the domain root — which means no base-path juggling and a real rewrite rule rather than
+the `404.html` trick Pages needs.
+
+Config for both is committed: [netlify.toml](netlify.toml) and [vercel.json](vercel.json).
+Connect the repo in their UI and it picks the settings up; nothing to configure by hand.
+
+### Environment variables
+
+Whichever host, add the same values from your `.env` in the host's dashboard, because Vite
+inlines `VITE_*` at build time:
+
+```
+VITE_SUPABASE_URL          VITE_EMAILJS_SERVICE_ID     VITE_CALLMEBOT_APIKEY
+VITE_SUPABASE_KEY          VITE_EMAILJS_TEMPLATE_ID    VITE_CALLMEBOT_PHONE
+                           VITE_EMAILJS_PUBLIC_KEY
+```
+
+Any that are missing just switch that feature off in the deployed build — the site still
+works and still records enquiries locally.
+
+**Do not set `VITE_BASE`** on Netlify or Vercel. It exists only for GitHub Pages, which
+serves from a subpath; these hosts serve from the root, where the default `/` is correct.
+
+### Once it is live
+
+The site is reachable by anyone with the URL, `/admin` included. The portal password is a
+browser-side lock, not real protection, so change it from the shipped default via
+**Admin → Change Password** before sharing the link.
+
 ## Pages
 
 | Route | What it is |

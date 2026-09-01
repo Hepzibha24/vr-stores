@@ -1,8 +1,13 @@
 name: Build and deploy to GitHub Pages
 
 on:
-  push:
-    branches: [main]
+  # Manual only. GitHub Pages needs a paid plan while this repository is
+  # private, so running on every push would just fail. Restore the push
+  # trigger below if the repository is ever made public again — everything
+  # else in this file already works.
+  #
+  #   push:
+  #     branches: [main]
   workflow_dispatch:
 
 # Allow the workflow to publish to Pages.
