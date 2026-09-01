@@ -166,7 +166,13 @@ EmailJS' free tier is 200 emails/month, well clear of normal traffic for this si
 ## Deploying
 
 The live site is **https://vrstores.in**, built and served by **Vercel** from this repository:
-every push to `main` deploys. Vercel serves from the domain root and rewrites unknown paths to
+every push to `main` deploys.
+
+Both `vrstores.in` and `www.vrstores.in` must be added under **Project → Settings →
+Domains**, even though DNS already points both at Vercel: it only issues a TLS certificate
+for domains registered to a project, so an unregistered `www` fails the HTTPS handshake
+rather than redirecting. [vercel.json](vercel.json) then permanently redirects `www` to the
+apex, which keeps one canonical address instead of the same content on two. Vercel serves from the domain root and rewrites unknown paths to
 `index.html`, so `/admin` and the other client-side routes return a real 200 — see
 [vercel.json](vercel.json).
 
