@@ -137,6 +137,19 @@ export default function AdminCloud() {
             </div>
           </form>
         </div>
+
+        <div className="panel" style={{ maxWidth: 560 }}>
+          <div className="panel-head">
+            <div>
+              <h2>This build</h2>
+              <p>
+                Commit <code>{__BUILD_INFO__.sha}</code>, built{' '}
+                {new Date(__BUILD_INFO__.at).toLocaleString('en-IN')}. If that commit is older
+                than your change, the host has not rebuilt yet.
+              </p>
+            </div>
+          </div>
+        </div>
       </>
     )
   }
@@ -235,6 +248,21 @@ export default function AdminCloud() {
             </div>
           </form>
         )}
+      </div>
+
+      <div className="panel" style={{ maxWidth: 520 }}>
+        <div className="panel-head">
+          <div>
+            <h2>This build</h2>
+            <p>
+              Commit <code>{__BUILD_INFO__.sha}</code>, built{' '}
+              {new Date(__BUILD_INFO__.at).toLocaleString('en-IN')}. Credentials seen at build
+              time — Supabase: {__BUILD_INFO__.env.supabase ? 'yes' : 'no'}, EmailJS:{' '}
+              {__BUILD_INFO__.env.emailjs ? 'yes' : 'no'}, WhatsApp:{' '}
+              {__BUILD_INFO__.env.whatsapp ? 'yes' : 'no'}.
+            </p>
+          </div>
+        </div>
       </div>
 
       <div className="panel" style={{ maxWidth: 520 }}>

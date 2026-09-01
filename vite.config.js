@@ -1,10 +1,54 @@
-import { defineConfig } from 'vite'
+import { execSync } from 'node:child_process'
+import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 
+/**
+ * Which commit this bundle was built from, and whether the build could see the
+ * credentials it needs.
+ *
+ * Without this there is no way to tell "the host has not deployed yet" from
+ * "it deployed but the environment variables were missing" — both look like a
+ * site that quietly has no database.
+ */
+function buildInfo(env) {
+  const sha =
+    process.env.VERCEL_GIT_COMMIT_SHA || // Vercel
+    process.env.GITHUB_SHA || // GitHub Actions
+    (() => {
+      try {
+        return execSync('git rev-parse HEAD').toString().trim()
+      } catch {
+        return 'unknown'
+      }
+    })()
+
+  return {
+    sha: sha.slice(0, 7),
+    at: new Date().toISOString(),
+    // Names only — never the values, since this ends up in the page.
+    env: {
+      supabase: Boolean(env.VITE_SUPABASE_URL && env.VITE_SUPABASE_KEY),
+      emailjs: Boolean(
+        env.VITE_EMAILJS_SERVICE_ID && env.VITE_EMAILJS_TEMPLATE_ID && env.VITE_EMAILJS_PUBLIC_KEY,
+      ),
+      whatsapp: Boolean(env.VITE_CALLMEBOT_APIKEY),
+    },
+  }
+}
+
 // https://vite.dev/config/
-export default defineConfig({
-  plugins: [react()],
-  // GitHub Pages serves the site from /<repo>/, so CI sets VITE_BASE.
-  // Local dev and any root-domain host keep '/'.
-  base: process.env.VITE_BASE || '/',
+export default defineConfig(({ mode }) => {
+  // loadEnv merges .env files with the real environment. Reading process.env
+  // alone would miss local .env files, which Vite only exposes to client code.
+  const env = loadEnv(mode, process.cwd(), '')
+
+  return {
+    plugins: [react()],
+    // GitHub Pages serves the site from /<repo>/, so CI sets VITE_BASE.
+    // Local dev and any root-domain host keep '/'.
+    base: env.VITE_BASE || '/',
+    define: {
+      __BUILD_INFO__: JSON.stringify(buildInfo(env)),
+    },
+  }
 })
