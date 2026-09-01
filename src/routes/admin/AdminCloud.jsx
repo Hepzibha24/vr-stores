@@ -2,6 +2,7 @@ import { useState, useSyncExternalStore } from 'react'
 import { useStore } from '../../data/StoreContext'
 import { remoteEnabled, syncFromCloud } from '../../data/store'
 import { signIn, signOut, signedInAs, subscribeAuth } from '../../data/supabaseAuth'
+import { missingEnvVars } from '../../data/supabase'
 
 export default function AdminCloud() {
   const { sync } = useStore()
@@ -45,10 +46,22 @@ export default function AdminCloud() {
         <div className="notice">
           <i className="ti ti-database-off" />
           <div>
-            <strong>Supabase is not configured</strong>
+            <strong>This build has no database credentials</strong>
             <p>
-              Set <code>VITE_SUPABASE_URL</code> and <code>VITE_SUPABASE_KEY</code> in{' '}
-              <code>.env</code> and restart. Everything still works and saves to this browser.
+              Missing from the build:{' '}
+              {missingEnvVars.map((v, i) => (
+                <span key={v}>
+                  {i > 0 && ', '}
+                  <code>{v}</code>
+                </span>
+              ))}
+              .
+            </p>
+            <p style={{ marginTop: '0.5rem' }}>
+              These are read when the site is <em>built</em>, not when it runs — so adding them
+              to a hosting dashboard changes nothing until the site is rebuilt. Locally, set
+              them in <code>.env</code> and restart. Everything still works meanwhile and saves
+              to this browser.
             </p>
           </div>
         </div>

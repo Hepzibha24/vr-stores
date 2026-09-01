@@ -18,6 +18,21 @@ const KEY_ = import.meta.env.VITE_SUPABASE_KEY
 
 export const remoteConfigured = Boolean(URL_ && KEY_)
 
+/**
+ * Which VITE_* names the build was missing. Vite inlines these at build time,
+ * so a value added to a host's dashboard does nothing until the site is
+ * rebuilt — a distinction that is invisible from the outside and worth naming
+ * precisely rather than saying "not configured".
+ */
+export const missingEnvVars = [
+  !URL_ && 'VITE_SUPABASE_URL',
+  !KEY_ && 'VITE_SUPABASE_KEY',
+  !import.meta.env.VITE_EMAILJS_SERVICE_ID && 'VITE_EMAILJS_SERVICE_ID',
+  !import.meta.env.VITE_EMAILJS_TEMPLATE_ID && 'VITE_EMAILJS_TEMPLATE_ID',
+  !import.meta.env.VITE_EMAILJS_PUBLIC_KEY && 'VITE_EMAILJS_PUBLIC_KEY',
+  !import.meta.env.VITE_CALLMEBOT_APIKEY && 'VITE_CALLMEBOT_APIKEY',
+].filter(Boolean)
+
 if (!remoteConfigured) {
   console.warn('[VR Store] Supabase credentials not found. Using localStorage only.')
 }
