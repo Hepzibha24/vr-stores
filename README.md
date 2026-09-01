@@ -165,17 +165,19 @@ EmailJS' free tier is 200 emails/month, well clear of normal traffic for this si
 
 ## Deploying
 
-The repository is private, and GitHub Pages needs a paid plan for private
-repositories — so `.github/workflows/deploy-pages.yml` is manual-only. It works as
-written; uncomment its `push` trigger if the repo is ever made public.
+[.github/workflows/deploy-pages.yml](.github/workflows/deploy-pages.yml) builds and
+publishes to **GitHub Pages** on every push to `main`. It needs one setting, once:
+**Settings → Pages → Source → GitHub Actions**. The site then lives at
+https://hepzibha24.github.io/vr-stores/
 
-For a private repo, connect it to **Netlify** or **Vercel** instead. Both deploy private
-GitHub repositories on their free tiers, both build on every push to `main`, and both serve
-from the domain root — which means no base-path juggling and a real rewrite rule rather than
-the `404.html` trick Pages needs.
+Pages serves from `/vr-stores/` rather than the domain root, so the workflow sets
+`VITE_BASE`; see the base-path notes in that file. It also copies `index.html` to `404.html`,
+because Pages has no rewrite rules and a refresh on `/admin` would otherwise 404.
 
-Config for both is committed: [netlify.toml](netlify.toml) and [vercel.json](vercel.json).
-Connect the repo in their UI and it picks the settings up; nothing to configure by hand.
+[netlify.toml](netlify.toml) and [vercel.json](vercel.json) are committed as alternatives.
+Both serve from the domain root, so they need no base path and use a real rewrite rule —
+worth switching to if you ever make the repository private, since Pages then requires a paid
+plan.
 
 ### Environment variables
 
