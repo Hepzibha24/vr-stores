@@ -13,10 +13,66 @@
  */
 import { getAccessToken } from './supabaseAuth'
 
-const URL_ = import.meta.env.VITE_SUPABASE_URL
-const KEY_ = import.meta.env.VITE_SUPABASE_KEY
+/**
+ * Credentials come from the build (VITE_*) when present, and otherwise from
+ * whatever the admin saved in this browser.
+ *
+ * The second path exists because build-time configuration is easy to get
+ * silently wrong — a value set in a hosting dashboard for the wrong
+ * environment produces a build that looks fine and quietly has no database.
+ * Letting the admin enter them directly means one misconfigured deploy does
+ * not leave the portal stranded.
+ */
+export const RUNTIME_CONFIG_KEY = 'vrstore:supabase-config'
+
+function runtimeConfig() {
+  try {
+    const raw = localStorage.getItem(RUNTIME_CONFIG_KEY)
+    const parsed = raw ? JSON.parse(raw) : null
+    return parsed && parsed.url && parsed.key ? parsed : null
+  } catch {
+    return null
+  }
+}
+
+const buildUrl = import.meta.env.VITE_SUPABASE_URL
+const buildKey = import.meta.env.VITE_SUPABASE_KEY
+const saved = buildUrl && buildKey ? null : runtimeConfig()
+
+const URL_ = buildUrl || saved?.url || ''
+const KEY_ = buildKey || saved?.key || ''
 
 export const remoteConfigured = Boolean(URL_ && KEY_)
+/** Where the credentials in use came from, for the admin to display. */
+export const configSource = buildUrl && buildKey ? 'build' : saved ? 'browser' : 'none'
+export const supabaseUrl = URL_
+
+/** Saves credentials for this browser. Reload afterwards so modules re-read. */
+export function saveRuntimeConfig(url, key) {
+  try {
+    localStorage.setItem(
+      RUNTIME_CONFIG_KEY,
+      JSON.stringify({ url: url.trim().replace(/\/$/, ''), key: key.trim() }),
+    )
+    // The invoice generator reads its own copy under this key.
+    localStorage.setItem(
+      'vr_supabase_config',
+      JSON.stringify({ url: url.trim().replace(/\/$/, ''), key: key.trim() }),
+    )
+    return true
+  } catch {
+    return false
+  }
+}
+
+export function clearRuntimeConfig() {
+  try {
+    localStorage.removeItem(RUNTIME_CONFIG_KEY)
+    localStorage.removeItem('vr_supabase_config')
+  } catch {
+    // ignore
+  }
+}
 
 /**
  * Which VITE_* names the build was missing. Vite inlines these at build time,

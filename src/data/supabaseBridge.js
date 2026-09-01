@@ -8,10 +8,14 @@
  */
 const CONFIG_KEY = 'vr_supabase_config'
 
+import { remoteConfigured } from './supabase'
+
 const URL_ = import.meta.env.VITE_SUPABASE_URL || ''
 const KEY_ = import.meta.env.VITE_SUPABASE_KEY || ''
 
-export const supabaseConfigured = Boolean(URL_ && KEY_)
+// Credentials entered by the admin are written straight to the invoice app's
+// own key, so this only has to handle the build-time pair.
+export const supabaseConfigured = remoteConfigured
 
 /**
  * Must run before the invoice iframe loads, since the app reads the config once

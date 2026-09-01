@@ -2,13 +2,21 @@ import { useState, useSyncExternalStore } from 'react'
 import { useStore } from '../../data/StoreContext'
 import { remoteEnabled, syncFromCloud } from '../../data/store'
 import { signIn, signOut, signedInAs, subscribeAuth } from '../../data/supabaseAuth'
-import { missingEnvVars } from '../../data/supabase'
+import {
+  clearRuntimeConfig,
+  configSource,
+  missingEnvVars,
+  saveRuntimeConfig,
+  supabaseUrl,
+} from '../../data/supabase'
 
 export default function AdminCloud() {
   const { sync } = useStore()
   const email = useSyncExternalStore(subscribeAuth, signedInAs, () => null)
 
   const [form, setForm] = useState({ email: '', password: '' })
+  const [creds, setCreds] = useState({ url: '', key: '' })
+  const [credError, setCredError] = useState('')
   const [show, setShow] = useState(false)
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
@@ -36,6 +44,25 @@ export default function AdminCloud() {
     setBusy(false)
   }
 
+  function handleSaveCreds(e) {
+    e.preventDefault()
+    if (!creds.url.trim() || !creds.key.trim()) {
+      setCredError('Both the project URL and the key are needed.')
+      return
+    }
+    if (!/^https:\/\/[a-z0-9-]+\.supabase\.co\/?$/i.test(creds.url.trim())) {
+      setCredError('That does not look like a Supabase project URL — expected https://xxxx.supabase.co')
+      return
+    }
+    if (!saveRuntimeConfig(creds.url, creds.key)) {
+      setCredError('Could not save — browser storage is unavailable.')
+      return
+    }
+    // Modules read the credentials once, at load, so a reload is the honest
+    // way to apply them rather than leaving half the app on the old config.
+    window.location.reload()
+  }
+
   if (!remoteEnabled) {
     return (
       <>
@@ -43,12 +70,13 @@ export default function AdminCloud() {
           <h1>Cloud Database</h1>
           <p>Sharing this site&apos;s data between devices.</p>
         </div>
+
         <div className="notice">
           <i className="ti ti-database-off" />
           <div>
             <strong>This build has no database credentials</strong>
             <p>
-              Missing from the build:{' '}
+              Missing when the site was built:{' '}
               {missingEnvVars.map((v, i) => (
                 <span key={v}>
                   {i > 0 && ', '}
@@ -58,12 +86,56 @@ export default function AdminCloud() {
               .
             </p>
             <p style={{ marginTop: '0.5rem' }}>
-              These are read when the site is <em>built</em>, not when it runs — so adding them
-              to a hosting dashboard changes nothing until the site is rebuilt. Locally, set
-              them in <code>.env</code> and restart. Everything still works meanwhile and saves
-              to this browser.
+              These are read when the site is <em>built</em>, not when it runs. If you added them
+              to Vercel and this still shows, check they are enabled for the{' '}
+              <strong>Production</strong> environment specifically, then redeploy — Vercel keeps
+              separate values for Production, Preview and Development.
             </p>
           </div>
+        </div>
+
+        <div className="panel" style={{ maxWidth: 560 }}>
+          <div className="panel-head">
+            <div>
+              <h2>Or enter them here</h2>
+              <p>
+                Stored in this browser only, and enough to get the portal and the invoice
+                generator working now. Fixing the build is still worth doing: the public contact
+                form needs the key too, and visitors do not have this.
+              </p>
+            </div>
+          </div>
+
+          <form className="form-grid" onSubmit={handleSaveCreds} noValidate>
+            <div className="field full">
+              <label htmlFor="cf-url">Project URL</label>
+              <input
+                id="cf-url"
+                value={creds.url}
+                onChange={(e) => setCreds((c) => ({ ...c, url: e.target.value }))}
+                placeholder="https://xxxxxxxx.supabase.co"
+              />
+            </div>
+            <div className="field full">
+              <label htmlFor="cf-key">Publishable / anon key</label>
+              <input
+                id="cf-key"
+                value={creds.key}
+                onChange={(e) => setCreds((c) => ({ ...c, key: e.target.value }))}
+                placeholder="sb_publishable_..."
+              />
+            </div>
+            {credError && (
+              <p className="form-error" role="alert">
+                {credError}
+              </p>
+            )}
+            <div className="form-actions">
+              <button className="btn btn-primary" type="submit">
+                <i className="ti ti-check" /> Save and reload
+              </button>
+            </div>
+          </form>
         </div>
       </>
     )
@@ -98,6 +170,10 @@ export default function AdminCloud() {
               {email
                 ? `Connected as ${email}. This device stays signed in.`
                 : 'Use the Supabase user you created under Authentication → Users.'}
+            </p>
+            <p className="stat-sub" style={{ marginTop: 4 }}>
+              {supabaseUrl}
+              {configSource === 'browser' && ' — credentials saved in this browser, not in the build'}
             </p>
           </div>
         </div>
@@ -182,6 +258,20 @@ export default function AdminCloud() {
           >
             <i className="ti ti-refresh" /> Re-sync now
           </button>
+          {configSource === 'browser' && (
+            <button
+              className="btn btn-danger"
+              type="button"
+              onClick={() => {
+                if (window.confirm('Remove the credentials saved in this browser?')) {
+                  clearRuntimeConfig()
+                  window.location.reload()
+                }
+              }}
+            >
+              <i className="ti ti-trash" /> Forget saved credentials
+            </button>
+          )}
         </div>
       </div>
     </>
