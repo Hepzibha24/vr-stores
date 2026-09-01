@@ -3,14 +3,7 @@ import { Link, NavLink } from 'react-router-dom'
 import { asset } from '../../lib/asset'
 import './Nav.css'
 
-const LINKS = [
-  { to: '/', label: 'Home', end: true },
-  { to: '/services', label: 'Services' },
-  { to: '/products', label: 'Products' },
-  { to: '/amc', label: 'AMC' },
-  { to: '/about', label: 'About' },
-  { to: '/contact', label: 'Contact' },
-]
+const LINKS = [{ to: '/', label: 'Home', end: true }]
 
 export default function Nav() {
   const [open, setOpen] = useState(false)
@@ -54,9 +47,6 @@ export default function Nav() {
               {l.label}
             </NavLink>
           ))}
-          <Link to="/book" className="nav-mobile-cta" onClick={() => setOpen(false)}>
-            Book a Service
-          </Link>
         </div>
       )}
     </nav>

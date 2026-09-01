@@ -204,28 +204,15 @@ browser-side lock, not real protection, so change it from the shipped default vi
 
 ## Pages
 
-| Route | What it is |
-|---|---|
-| `/` | The original one-pager — hero, services, technicians, AMC, brands, timings, contact |
-| `/about` | Showroom story, mission and vision, certified engineers |
-| `/services` | Full service list, the four-step work flow, benefits strip |
-| `/products` | AC catalogue with brand / capacity / type filters and search |
-| `/amc` | AMC plan cards plus the interactive cost estimator |
-| `/contact` | The contact section on its own route |
-| `/book` | Booking form. Services, Products and the AMC estimator hand off to it pre-filled |
-| `/admin/*` | The admin portal |
+The public site is a single page at `/` — hero, services, technicians, AMC, brands, timings
+and contact, with the enquiry and booking forms in place. `/admin/*` is the admin portal.
 
-**Clicking the VR Store logo — in the header or the footer — opens the admin portal.**
+Unknown paths redirect to `/`.
 
 ## Admin sections
 
-Dashboard · Enquiries · AMC & Bookings · Site Content · **Products** · **AMC Pricing** ·
-Invoice Generator · Change Password.
-
-- **Products** edits the `/products` catalogue.
-- **AMC Pricing** sets the rate card behind the `/amc` estimator, with a live preview of what
-  customers will be quoted before you save. The formula matches the sample's: base rate by
-  capacity, times the multiplier for comprehensive cover, plus a surcharge for cassettes.
+Dashboard · Enquiries · AMC & Bookings · Site Content · AMC Pricing · Invoice Generator ·
+Cloud Database · Change Password.
 
 ## Cloud sync (Supabase)
 
@@ -373,9 +360,8 @@ src/
                        supabaseAuth.js (database sign-in),
                        StoreContext.jsx (React binding), auth.js,
                        notify.js (email + WhatsApp alerts)
-  routes/public/       About, Services, Products, Amc, Contact, Book pages
-  routes/admin/        Login, Home, Enquiries, Bookings, Content, Products,
-                       Pricing, Invoices, Cloud, Security
+  routes/admin/        Login, Home, Enquiries, Bookings, Content, Pricing,
+                       Invoices, Cloud, Security
 public/                logo.jpg, hero-bg.jpg, technician.jpg extracted from the original HTML;
                        vr-mark.svg (sidebar), admin-mark.svg (admin tab icon),
                        invoice-generator.html (standalone billing app)
