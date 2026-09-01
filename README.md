@@ -27,7 +27,7 @@ Vite prints a local URL. This project is pinned to **http://localhost:5180** in
 |---|---|
 | URL | `/admin` (redirects to `/admin/login` when signed out) |
 | Username | `admin` |
-| Password | `LjEX-QLrW-BsYq-ryX7` |
+| Password | set in [src/data/auth.js](src/data/auth.js) — change it via **Admin → Change Password** |
 
 **Change this password from inside the app** — Admin → **Change Password**. You do not need to
 edit any code, and the portal nags you with a banner until you do.
