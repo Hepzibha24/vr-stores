@@ -111,10 +111,16 @@ export async function pullAll() {
   ])
 
   if (msgs.ok) out.enquiries = (msgs.data || []).map(rowToEnquiry)
-  else out.errors.push(`enquiries: ${msgs.error}`)
+  else {
+    out.errors.push(`enquiries: ${msgs.error}`)
+    if (msgs.authRequired) out.authRequired = true
+  }
 
   if (bks.ok) out.bookings = (bks.data || []).map(rowToBooking)
-  else out.errors.push(`bookings: ${bks.error}`)
+  else {
+    out.errors.push(`bookings: ${bks.error}`)
+    if (bks.authRequired) out.authRequired = true
+  }
 
   if (settings.ok) {
     for (const [field, key] of Object.entries(CONTENT_KEYS)) {

@@ -11,6 +11,8 @@
  * Credentials come from .env; without them `remoteConfigured` is false and the
  * whole cloud layer is skipped.
  */
+import { getAccessToken } from './supabaseAuth'
+
 const URL_ = import.meta.env.VITE_SUPABASE_URL
 const KEY_ = import.meta.env.VITE_SUPABASE_KEY
 
@@ -20,10 +22,13 @@ if (!remoteConfigured) {
   console.warn('[VR Store] Supabase credentials not found. Using localStorage only.')
 }
 
-function headers(prefer) {
+// The bearer is the signed-in user's token when there is one, and the anon key
+// otherwise. RLS then decides what the request may touch: the public site gets
+// anon's narrow insert/select rights, the signed-in admin gets full access.
+async function headers(prefer) {
   const h = {
     apikey: KEY_,
-    Authorization: `Bearer ${KEY_}`,
+    Authorization: `Bearer ${await getAccessToken()}`,
     'Content-Type': 'application/json',
     Accept: 'application/json',
   }
@@ -40,7 +45,7 @@ export async function rest(path, { method = 'GET', body, prefer } = {}) {
   try {
     const res = await fetch(`${URL_}/rest/v1/${path}`, {
       method,
-      headers: headers(prefer),
+      headers: await headers(prefer),
       body: body === undefined ? undefined : JSON.stringify(body),
     })
     const text = await res.text()
@@ -51,6 +56,11 @@ export async function rest(path, { method = 'GET', body, prefer } = {}) {
       parsed = null
     }
     if (!res.ok) {
+      // 401/403 on a table the anon key cannot reach is the lockdown working,
+      // not a bug — the admin just has not signed in to the database yet.
+      if (res.status === 401 || res.status === 403) {
+        return { ok: false, error: parsed?.message || 'Sign in to the database to access this', authRequired: true }
+      }
       return { ok: false, error: parsed?.message || `Supabase returned ${res.status}` }
     }
     return { ok: true, data: parsed }

@@ -192,7 +192,7 @@ function mirror(run) {
     const sync = ensure().sync
     setSync({
       pendingWrites: Math.max(0, sync.pendingWrites - 1),
-      status: result?.ok ? 'synced' : 'error',
+      status: result?.ok ? 'synced' : result?.authRequired ? 'signin-required' : 'error',
       error: result?.ok ? '' : result?.error || 'Cloud write failed',
       lastSyncedAt: result?.ok ? new Date().toISOString() : sync.lastSyncedAt,
     })
@@ -214,7 +214,11 @@ export async function syncFromCloud({ force = false } = {}) {
 
   const [result, catalogue] = await Promise.all([pullAll(), pullCatalogue()])
   if (!result.ok && !result.enquiries && !result.bookings) {
-    setSync({ status: 'error', error: result.error || (result.errors || []).join('; ') })
+    const blocked = result.authRequired || /sign in to the database/i.test((result.errors || []).join(' '))
+    setSync({
+      status: blocked ? 'signin-required' : 'error',
+      error: result.error || (result.errors || []).join('; '),
+    })
     return { ok: false, error: result.error }
   }
 
@@ -240,9 +244,10 @@ export async function syncFromCloud({ force = false } = {}) {
       next.products = catalogue.products
     }
     if (catalogue.amcPricing) next.amcPricing = { ...doc.amcPricing, ...catalogue.amcPricing }
+    const failedOnAuth = (result.errors || []).some((e) => /sign in to the database/i.test(e))
     next.sync = {
       ...doc.sync,
-      status: (result.errors || []).length ? 'error' : 'synced',
+      status: failedOnAuth ? 'signin-required' : (result.errors || []).length ? 'error' : 'synced',
       error: (result.errors || []).join('; '),
       lastSyncedAt: new Date().toISOString(),
     }

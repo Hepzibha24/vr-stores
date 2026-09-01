@@ -14,6 +14,7 @@ const NAV = [
   { to: '/admin/products', label: 'Products', icon: 'ti-building-store' },
   { to: '/admin/pricing', label: 'AMC Pricing', icon: 'ti-currency-rupee' },
   { to: '/admin/invoices', label: 'Invoice Generator', icon: 'ti-file-invoice' },
+  { to: '/admin/cloud', label: 'Cloud Database', icon: 'ti-database' },
   { to: '/admin/security', label: 'Change Password', icon: 'ti-lock' },
 ]
 

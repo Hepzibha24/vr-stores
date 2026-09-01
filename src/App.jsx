@@ -23,6 +23,7 @@ const AdminContent = lazy(() => import('./routes/admin/AdminContent'))
 const AdminProducts = lazy(() => import('./routes/admin/AdminProducts'))
 const AdminPricing = lazy(() => import('./routes/admin/AdminPricing'))
 const AdminInvoices = lazy(() => import('./routes/admin/AdminInvoices'))
+const AdminCloud = lazy(() => import('./routes/admin/AdminCloud'))
 const AdminSecurity = lazy(() => import('./routes/admin/AdminSecurity'))
 
 export default function App() {
@@ -55,6 +56,7 @@ export default function App() {
             <Route path="products" element={<AdminProducts />} />
             <Route path="pricing" element={<AdminPricing />} />
             <Route path="invoices" element={<AdminInvoices />} />
+            <Route path="cloud" element={<AdminCloud />} />
             <Route path="security" element={<AdminSecurity />} />
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />

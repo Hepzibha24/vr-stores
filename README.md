@@ -223,6 +223,26 @@ entirely and the app behaves exactly as it did before.
 Nothing breaks and nothing is lost: records still save locally, and the admin sidebar shows
 **Cloud sync failed** with the reason. Click that badge any time to re-sync.
 
+### Signing in to the database
+
+`supabase/policies.sql` restricts customer data to a signed-in user, so the admin has a
+**Cloud Database** screen (sidebar → Cloud Database) where you sign in with the Supabase user
+from **Authentication → Users**. The session persists per device.
+
+That is a different thing from the admin password at the front of the portal:
+
+| | What it is |
+|---|---|
+| Admin password | A convenience lock that runs in the browser. Keeps casual visitors out of `/admin`. |
+| Cloud Database sign-in | The database's own login. Required to *read* enquiries and bookings back, and to save content, products and pricing to the cloud. |
+
+**Customers never need it.** The anon key holds INSERT on `messages` and `bookings`, so the
+public contact and booking forms keep working for everyone, signed in or not — leads always
+reach the database. It is only reading them back that requires the login.
+
+Until you sign in, the sidebar badge reads **Sign in to database** (click it to go straight
+there) and the admin runs from this browser's own copy of the data.
+
 ### Merge behaviour
 
 On load the cloud copy is pulled and merged by id. Remote wins where a row exists in both,
@@ -311,11 +331,12 @@ src/
                        (one .jsx + one .css per section)
   components/admin/    AdminLayout (sidebar), RequireAuth, shared UI bits, admin.css
   data/                store.js (data access), seed.js (initial content),
+                       supabaseAuth.js (database sign-in),
                        StoreContext.jsx (React binding), auth.js,
                        notify.js (email + WhatsApp alerts)
   routes/public/       About, Services, Products, Amc, Contact, Book pages
   routes/admin/        Login, Home, Enquiries, Bookings, Content, Products,
-                       Pricing, Invoices, Security
+                       Pricing, Invoices, Cloud, Security
 public/                logo.jpg, hero-bg.jpg, technician.jpg extracted from the original HTML;
                        vr-mark.svg (sidebar), admin-mark.svg (admin tab icon),
                        invoice-generator.html (standalone billing app)
