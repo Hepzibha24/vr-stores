@@ -24,13 +24,11 @@ nav.site-nav {
   opacity: 0.75;
 }
 .nav-logo img {
-  height: 36px;
-}
-.nav-logo span {
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--red);
-  letter-spacing: 1px;
+  /* The source is cropped to the artwork, so this is all logo — the old 36px
+     was mostly the white margin baked into the original file. */
+  height: 54px;
+  width: auto;
+  display: block;
 }
 .nav-cta {
   background: var(--red);
@@ -51,6 +49,9 @@ nav.site-nav {
 
 @media (max-width: 768px) {
   nav.site-nav {
-    padding: 0.75rem 1.25rem;
+    padding: 0.6rem 1.25rem;
+  }
+  .nav-logo img {
+    height: 44px;
   }
 }

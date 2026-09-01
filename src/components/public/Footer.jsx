@@ -11,7 +11,7 @@ export default function Footer() {
       <div className="footer-top">
         <div className="footer-brand">
           <Link to="/admin" title="Open the admin portal">
-            <img src={asset('logo.jpg')} alt="VR Store logo" />
+            <img src={asset('logo.png')} alt="VR Store" />
           </Link>
           <p>
             O General Exclusive Authorised AC Showroom. Trusted sales, installation &amp; service in

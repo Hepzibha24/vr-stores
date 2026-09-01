@@ -14,7 +14,9 @@ footer.site-footer {
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 .footer-brand img {
-  height: 44px;
+  height: 76px;
+  width: auto;
+  display: block;
   margin-bottom: 1rem;
 }
 .footer-brand p {

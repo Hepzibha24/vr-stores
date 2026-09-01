@@ -16,8 +16,7 @@ export default function Nav() {
         title="Open the admin portal"
         aria-label="Open the admin portal"
       >
-        <img src={asset('logo.jpg')} alt="VR Store logo" />
-        <span>VR STORE</span>
+        <img src={asset('logo.png')} alt="VR Store" />
       </Link>
 
       <a className="nav-cta" href="tel:9940291467">
