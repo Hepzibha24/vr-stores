@@ -1,54 +1,29 @@
-import { useState } from 'react'
-import { Link, NavLink } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { asset } from '../../lib/asset'
 import './Nav.css'
 
-const LINKS = [{ to: '/', label: 'Home', end: true }]
-
+/**
+ * Single-page site, so the bar carries no section links — just the brand and
+ * the call to action. With no menu to open, the mobile burger goes too.
+ * The logo is the way in to the admin portal.
+ */
 export default function Nav() {
-  const [open, setOpen] = useState(false)
-
   return (
     <nav className="site-nav">
-      {/* The logo is the way in to the admin portal. */}
-      <Link className="nav-logo" to="/admin" title="Open the admin portal" aria-label="Open the admin portal">
+      <Link
+        className="nav-logo"
+        to="/admin"
+        title="Open the admin portal"
+        aria-label="Open the admin portal"
+      >
         <img src={asset('logo.jpg')} alt="VR Store logo" />
         <span>VR STORE</span>
       </Link>
 
-      <div className="nav-links">
-        {LINKS.map((l) => (
-          <NavLink key={l.to} to={l.to} end={l.end}>
-            {l.label}
-          </NavLink>
-        ))}
-      </div>
-
-      <div className="nav-right">
-        <a className="nav-cta" href="tel:9940291467">
-          <i className="ti ti-phone" style={{ verticalAlign: '-2px', marginRight: 5, fontSize: 14 }} />
-          Call Now
-        </a>
-        <button
-          type="button"
-          className="nav-toggle"
-          aria-label={open ? 'Close menu' : 'Open menu'}
-          aria-expanded={open}
-          onClick={() => setOpen((v) => !v)}
-        >
-          <i className={open ? 'ti ti-x' : 'ti ti-menu-2'} />
-        </button>
-      </div>
-
-      {open && (
-        <div className="nav-mobile">
-          {LINKS.map((l) => (
-            <NavLink key={l.to} to={l.to} end={l.end} onClick={() => setOpen(false)}>
-              {l.label}
-            </NavLink>
-          ))}
-        </div>
-      )}
+      <a className="nav-cta" href="tel:9940291467">
+        <i className="ti ti-phone" style={{ verticalAlign: '-2px', marginRight: 5, fontSize: 14 }} />
+        Call Now
+      </a>
     </nav>
   )
 }

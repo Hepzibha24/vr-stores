@@ -207,7 +207,8 @@ browser-side lock, not real protection, so change it from the shipped default vi
 The public site is a single page at `/` — hero, services, technicians, AMC, brands, timings
 and contact, with the enquiry and booking forms in place. `/admin/*` is the admin portal.
 
-Unknown paths redirect to `/`.
+The header carries no navigation links, since there is only one page: just the brand and the
+Call Now button. Unknown paths redirect to `/`.
 
 ## Admin sections
 
