@@ -32,6 +32,11 @@ export default function AdminLogin() {
     try {
       if (await login(username, password)) {
         navigate(location.state?.from || '/admin', { replace: true })
+      } else if (username.includes('@')) {
+        setError(
+          'That looks like an email address. This screen takes the portal username — try "admin". ' +
+            'Your Supabase email is used later, under Cloud Database.',
+        )
       } else {
         setError('Incorrect username or password.')
       }
@@ -50,7 +55,10 @@ export default function AdminLogin() {
           <i className="ti ti-lock" />
         </div>
         <h1>Admin Control Panel</h1>
-        <p className="lede">Enter your access credentials to proceed.</p>
+        <p className="lede">
+          Sign in with the portal username — not your Supabase email. The database sign-in lives
+          inside, under Cloud Database.
+        </p>
 
         {insecureContext && (
           <p className="form-error" role="alert">
@@ -69,7 +77,7 @@ export default function AdminLogin() {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 autoComplete="username"
-                placeholder="Enter username"
+                placeholder="admin"
               />
             </div>
           </div>
