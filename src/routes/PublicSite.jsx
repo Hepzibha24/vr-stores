@@ -9,6 +9,7 @@ import AMC from '../components/public/AMC'
 import Brands from '../components/public/Brands'
 import Models from '../components/public/Models'
 import Reviews from '../components/public/Reviews'
+import Faq from '../components/public/Faq'
 import ServiceAreas from '../components/public/ServiceAreas'
 import Timings from '../components/public/Timings'
 import Contact from '../components/public/Contact'
@@ -38,6 +39,7 @@ export default function PublicSite() {
       <Reviews />
       <ServiceAreas />
       <Timings />
+      <Faq />
       <Contact />
       <Footer />
       <FloatingActions />
