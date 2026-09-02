@@ -14,6 +14,7 @@
  * written first so a lead cannot be lost to a network failure.
  */
 import { remoteConfigured, rest } from './supabase'
+import { currentSession } from './supabaseAuth'
 
 export const remoteEnabled = remoteConfigured
 
@@ -105,22 +106,34 @@ export async function pullAll() {
   const out = { ok: true, enquiries: null, bookings: null, content: {}, errors: [] }
   if (!remoteConfigured) return { ...out, ok: false, error: 'Supabase not configured' }
 
+  // Enquiries and bookings are customer data: the RLS policies allow the
+  // anonymous key to insert a lead but never to read one back. Asking anyway
+  // guarantees a 401, so every public visitor was firing two doomed requests
+  // and logging two console errors on a page that has no use for the answer.
+  // Content and the catalogue are public and always fetched.
+  const signedIn = Boolean(currentSession())
+
   const [msgs, bks, settings] = await Promise.all([
-    rest('messages?select=*&order=created_at.desc'),
-    rest('bookings?select=*&order=created_at.desc'),
+    signedIn ? rest('messages?select=*&order=created_at.desc') : null,
+    signedIn ? rest('bookings?select=*&order=created_at.desc') : null,
     rest(`settings?select=key,value&key=in.(${Object.values(CONTENT_KEYS).join(',')})`),
   ])
 
-  if (msgs.ok) out.enquiries = (msgs.data || []).map(rowToEnquiry)
-  else {
-    out.errors.push(`enquiries: ${msgs.error}`)
-    if (msgs.authRequired) out.authRequired = true
-  }
+  if (!signedIn) {
+    // Not an error — the admin badge uses this to offer the database sign-in.
+    out.authRequired = true
+  } else {
+    if (msgs.ok) out.enquiries = (msgs.data || []).map(rowToEnquiry)
+    else {
+      out.errors.push(`enquiries: ${msgs.error}`)
+      if (msgs.authRequired) out.authRequired = true
+    }
 
-  if (bks.ok) out.bookings = (bks.data || []).map(rowToBooking)
-  else {
-    out.errors.push(`bookings: ${bks.error}`)
-    if (bks.authRequired) out.authRequired = true
+    if (bks.ok) out.bookings = (bks.data || []).map(rowToBooking)
+    else {
+      out.errors.push(`bookings: ${bks.error}`)
+      if (bks.authRequired) out.authRequired = true
+    }
   }
 
   if (settings.ok) {

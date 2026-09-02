@@ -247,10 +247,14 @@ export async function syncFromCloud({ force = false } = {}) {
       next.products = catalogue.products
     }
     if (catalogue.amcPricing) next.amcPricing = { ...doc.amcPricing, ...catalogue.amcPricing }
-    const failedOnAuth = (result.errors || []).some((e) => /sign in to the database/i.test(e))
+    // authRequired covers both "asked and was refused" and "did not ask,
+    // because there is no session" — the badge should offer the sign-in either
+    // way rather than claiming everything is synced.
+    const needsSignIn =
+      result.authRequired || (result.errors || []).some((e) => /sign in to the database/i.test(e))
     next.sync = {
       ...doc.sync,
-      status: failedOnAuth ? 'signin-required' : (result.errors || []).length ? 'error' : 'synced',
+      status: needsSignIn ? 'signin-required' : (result.errors || []).length ? 'error' : 'synced',
       error: (result.errors || []).join('; '),
       lastSyncedAt: new Date().toISOString(),
     }
