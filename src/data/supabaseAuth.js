@@ -9,8 +9,8 @@
  * Implemented with fetch for the same reason as supabase.js: the SDK's bulk is
  * not worth carrying for two endpoints.
  */
-const URL_ = import.meta.env.VITE_SUPABASE_URL
-const KEY_ = import.meta.env.VITE_SUPABASE_KEY
+import { SUPABASE_KEY as KEY_, SUPABASE_URL as URL_ } from './config'
+
 const SESSION_KEY = 'vrstore:supabase-session'
 
 // Refresh a little early rather than letting a request fail on a stale token.

@@ -12,6 +12,7 @@
  * whole cloud layer is skipped.
  */
 import { getAccessToken } from './supabaseAuth'
+import { SUPABASE_KEY, SUPABASE_URL } from './config'
 
 /**
  * Credentials come from the build (VITE_*) when present, and otherwise from
@@ -35,8 +36,8 @@ function runtimeConfig() {
   }
 }
 
-const buildUrl = import.meta.env.VITE_SUPABASE_URL
-const buildKey = import.meta.env.VITE_SUPABASE_KEY
+const buildUrl = SUPABASE_URL
+const buildKey = SUPABASE_KEY
 const saved = buildUrl && buildKey ? null : runtimeConfig()
 
 const URL_ = buildUrl || saved?.url || ''
@@ -81,8 +82,8 @@ export function clearRuntimeConfig() {
  * precisely rather than saying "not configured".
  */
 export const missingEnvVars = [
-  !URL_ && 'VITE_SUPABASE_URL',
-  !KEY_ && 'VITE_SUPABASE_KEY',
+  !SUPABASE_URL && 'VITE_SUPABASE_URL',
+  !SUPABASE_KEY && 'VITE_SUPABASE_KEY',
   !import.meta.env.VITE_EMAILJS_SERVICE_ID && 'VITE_EMAILJS_SERVICE_ID',
   !import.meta.env.VITE_EMAILJS_TEMPLATE_ID && 'VITE_EMAILJS_TEMPLATE_ID',
   !import.meta.env.VITE_EMAILJS_PUBLIC_KEY && 'VITE_EMAILJS_PUBLIC_KEY',

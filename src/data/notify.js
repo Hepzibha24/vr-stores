@@ -11,11 +11,13 @@
  * Configure both in a `.env` file at the project root; see .env.example.
  */
 
-const EMAILJS_SERVICE = import.meta.env.VITE_EMAILJS_SERVICE_ID || ''
-const EMAILJS_TEMPLATE = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || ''
-const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || ''
-const CALLMEBOT_KEY = import.meta.env.VITE_CALLMEBOT_APIKEY || ''
-const CALLMEBOT_PHONE = import.meta.env.VITE_CALLMEBOT_PHONE || '+919940291467'
+import {
+  CALLMEBOT_APIKEY as CALLMEBOT_KEY,
+  CALLMEBOT_PHONE,
+  EMAILJS_PUBLIC_KEY,
+  EMAILJS_SERVICE_ID as EMAILJS_SERVICE,
+  EMAILJS_TEMPLATE_ID as EMAILJS_TEMPLATE,
+} from './config'
 
 const EMAILJS_ENDPOINT = 'https://api.emailjs.com/api/v1.0/email/send'
 const CALLMEBOT_ENDPOINT = 'https://api.callmebot.com/whatsapp.php'

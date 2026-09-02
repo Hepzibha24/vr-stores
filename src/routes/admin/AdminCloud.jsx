@@ -256,10 +256,13 @@ export default function AdminCloud() {
             <h2>This build</h2>
             <p>
               Commit <code>{__BUILD_INFO__.sha}</code>, built{' '}
-              {new Date(__BUILD_INFO__.at).toLocaleString('en-IN')}. Credentials seen at build
-              time — Supabase: {__BUILD_INFO__.env.supabase ? 'yes' : 'no'}, EmailJS:{' '}
-              {__BUILD_INFO__.env.emailjs ? 'yes' : 'no'}, WhatsApp:{' '}
-              {__BUILD_INFO__.env.whatsapp ? 'yes' : 'no'}.
+              {new Date(__BUILD_INFO__.at).toLocaleString('en-IN')}. Database credentials came
+              from{' '}
+              {__BUILD_INFO__.env.supabase === 'env'
+                ? 'this build’s environment variables'
+                : 'the committed default'}
+              . EmailJS: {__BUILD_INFO__.env.emailjs ? 'configured' : 'not set up'}. WhatsApp:{' '}
+              {__BUILD_INFO__.env.whatsapp ? 'configured' : 'not set up'}.
             </p>
           </div>
         </div>

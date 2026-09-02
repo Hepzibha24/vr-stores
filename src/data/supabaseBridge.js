@@ -9,9 +9,8 @@
 const CONFIG_KEY = 'vr_supabase_config'
 
 import { remoteConfigured } from './supabase'
+import { SUPABASE_KEY as KEY_, SUPABASE_URL as URL_ } from './config'
 
-const URL_ = import.meta.env.VITE_SUPABASE_URL || ''
-const KEY_ = import.meta.env.VITE_SUPABASE_KEY || ''
 
 // Credentials entered by the admin are written straight to the invoice app's
 // own key, so this only has to handle the build-time pair.

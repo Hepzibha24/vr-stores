@@ -25,9 +25,11 @@ function buildInfo(env) {
   return {
     sha: sha.slice(0, 7),
     at: new Date().toISOString(),
-    // Names only — never the values, since this ends up in the page.
+    // Names and sources only — never values, since this ends up in the page.
+    // Supabase always resolves, because src/data/config.js carries a committed
+    // default; what is worth knowing is whether this build overrode it.
     env: {
-      supabase: Boolean(env.VITE_SUPABASE_URL && env.VITE_SUPABASE_KEY),
+      supabase: env.VITE_SUPABASE_URL && env.VITE_SUPABASE_KEY ? 'env' : 'default',
       emailjs: Boolean(
         env.VITE_EMAILJS_SERVICE_ID && env.VITE_EMAILJS_TEMPLATE_ID && env.VITE_EMAILJS_PUBLIC_KEY,
       ),
@@ -42,13 +44,34 @@ export default defineConfig(({ mode }) => {
   // alone would miss local .env files, which Vite only exposes to client code.
   const env = loadEnv(mode, process.cwd(), '')
 
+  const info = buildInfo(env)
+
   return {
-    plugins: [react()],
+    plugins: [
+      react(),
+      {
+        name: 'build-stamp',
+        transformIndexHtml() {
+          return [
+            {
+              tag: 'meta',
+              attrs: {
+                name: 'x-build',
+                content:
+                  `${info.sha} ${info.at} supabase=${info.env.supabase} ` +
+                  `emailjs=${info.env.emailjs} whatsapp=${info.env.whatsapp}`,
+              },
+              injectTo: 'head',
+            },
+          ]
+        },
+      },
+    ],
     // GitHub Pages serves the site from /<repo>/, so CI sets VITE_BASE.
     // Local dev and any root-domain host keep '/'.
     base: env.VITE_BASE || '/',
     define: {
-      __BUILD_INFO__: JSON.stringify(buildInfo(env)),
+      __BUILD_INFO__: JSON.stringify(info),
     },
   }
 })
