@@ -7,4 +7,4 @@ Allow: /
 Disallow: /admin
 Disallow: /invoice-generator.html
 
-Sitemap: https://vrstores.in/sitemap.xml
+Sitemap: https://www.vrstores.in/sitemap.xml
