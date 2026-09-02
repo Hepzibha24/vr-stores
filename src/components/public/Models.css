@@ -1,0 +1,158 @@
+.models-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 22px;
+  margin-top: 3.5rem;
+}
+.model-card {
+  position: relative;
+  background: white;
+  border: 1px solid #ededed;
+  border-radius: 18px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 8px 24px rgba(0, 0, 0, 0.03);
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s,
+    border-color 0.3s;
+}
+.model-card:hover {
+  transform: translateY(-7px);
+  box-shadow: 0 22px 48px rgba(0, 0, 0, 0.1);
+  border-color: #e2e2e2;
+}
+.model-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 2;
+  background: linear-gradient(135deg, var(--red), var(--red-dark));
+  color: #fff;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 5px 11px;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(204, 0, 0, 0.3);
+}
+
+/* A soft product stage rather than a flat panel — it gives the unit somewhere
+   to sit when the shop has not uploaded a cut-out photograph. */
+.model-media {
+  height: 190px;
+  background: radial-gradient(circle at 50% 42%, #ffffff 0%, #f6f7f9 62%, #eef0f3 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid #f0f0f0;
+  overflow: hidden;
+}
+.model-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 1.25rem;
+  display: block;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.model-card:hover .model-media img {
+  transform: scale(1.05);
+}
+.model-media i {
+  font-size: 74px;
+  color: var(--red);
+  opacity: 0.4;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s;
+}
+.model-card:hover .model-media i {
+  transform: scale(1.08);
+  opacity: 0.55;
+}
+
+.model-body {
+  padding: 1.5rem 1.4rem 1.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  flex: 1;
+}
+.model-body h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.4;
+  letter-spacing: -0.2px;
+}
+.model-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.model-brand,
+.model-tag {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.9px;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+.model-brand {
+  background: var(--red);
+  color: #fff;
+}
+.model-tag {
+  background: var(--gray);
+  color: #5a5a5a;
+}
+.model-desc {
+  font-size: 12.75px;
+  color: var(--muted);
+  line-height: 1.6;
+  flex: 1;
+}
+.model-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 4px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  background: #25d366;
+  color: #fff;
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  text-decoration: none;
+  box-shadow: 0 6px 18px rgba(37, 211, 102, 0.28);
+  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+.model-cta i {
+  font-size: 18px;
+}
+.model-cta:hover {
+  background: #1ebe5d;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(37, 211, 102, 0.36);
+}
+
+@media (max-width: 768px) {
+  .models-grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+  }
+  .model-media {
+    height: 160px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .model-card,
+  .model-media img,
+  .model-media i,
+  .model-cta {
+    transition: none;
+  }
+}

@@ -13,6 +13,7 @@ const AdminHome = lazy(() => import('./routes/admin/AdminHome'))
 const AdminEnquiries = lazy(() => import('./routes/admin/AdminEnquiries'))
 const AdminBookings = lazy(() => import('./routes/admin/AdminBookings'))
 const AdminContent = lazy(() => import('./routes/admin/AdminContent'))
+const AdminModels = lazy(() => import('./routes/admin/AdminModels'))
 const AdminPricing = lazy(() => import('./routes/admin/AdminPricing'))
 const AdminInvoices = lazy(() => import('./routes/admin/AdminInvoices'))
 const AdminCloud = lazy(() => import('./routes/admin/AdminCloud'))
@@ -37,6 +38,7 @@ export default function App() {
             <Route path="enquiries" element={<AdminEnquiries />} />
             <Route path="bookings" element={<AdminBookings />} />
             <Route path="content" element={<AdminContent />} />
+            <Route path="models" element={<AdminModels />} />
             <Route path="pricing" element={<AdminPricing />} />
             <Route path="invoices" element={<AdminInvoices />} />
             <Route path="cloud" element={<AdminCloud />} />

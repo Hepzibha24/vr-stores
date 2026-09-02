@@ -112,16 +112,17 @@ export const SEED_ANALYTICS = (() => {
   return events
 })()
 
-// ── Products catalogue (Admin → Products) ────────────────────────────────
-// The sample shipped an empty catalogue; these give the page something real to
-// show before the shop adds its own. Prices are indicative, not quotes.
+// ── AC models on the floor (Admin → AC Models) ───────────────────────────
+// Shown on the home page with a WhatsApp enquiry button. No prices: they move
+// with stock and offers, and the cards send people to WhatsApp for a current
+// quote rather than showing a figure that will go stale.
 export const SEED_PRODUCTS = [
-  { id: 1, name: 'O General ASGA18FUTA Split AC', brand: 'O General', capacity: '1.5 Ton', type: 'Split', price: 52990, description: 'Tropicalised rotary compressor, 5 star inverter, copper condenser. Built for Chennai summers.', featured: true, image: '' },
-  { id: 2, name: 'O General ASGA12FUTA Split AC', brand: 'O General', capacity: '1.0 Ton', type: 'Split', price: 41990, description: 'Compact 1 ton inverter split for bedrooms and small cabins.', featured: true, image: '' },
-  { id: 3, name: 'O General AUGA24FUAS Cassette AC', brand: 'O General', capacity: '2.0 Ton', type: 'Cassette', price: 86990, description: 'Four-way ceiling cassette for shops, clinics and offices.', featured: false, image: '' },
-  { id: 4, name: 'Daikin FTKF35 Split AC', brand: 'Daikin', capacity: '1.0 Ton', type: 'Split', price: 38990, description: 'Inverter split with PM 2.5 filter and coanda airflow.', featured: false, image: '' },
-  { id: 5, name: 'Voltas 183V Vectra Split AC', brand: 'Voltas', capacity: '1.5 Ton', type: 'Split', price: 34990, description: 'Value 5 star inverter with turbo cooling mode.', featured: false, image: '' },
-  { id: 6, name: 'Hitachi Kashikoi 5100X', brand: 'Hitachi', capacity: '1.5 Ton', type: 'Split', price: 46990, description: 'Expandable inverter with self-cleaning front panel.', featured: false, image: '' },
+  { id: 1, name: 'O General ASGA18FUTA Split AC', brand: 'O General', capacity: '1.5 Ton', type: 'Split', description: 'Tropicalised rotary compressor, 5 star inverter, copper condenser. Built for Chennai summers.', featured: true, image: '' },
+  { id: 2, name: 'O General ASGA12FUTA Split AC', brand: 'O General', capacity: '1.0 Ton', type: 'Split', description: 'Compact 1 ton inverter split for bedrooms and small cabins.', featured: true, image: '' },
+  { id: 3, name: 'O General AUGA24FUAS Cassette AC', brand: 'O General', capacity: '2.0 Ton', type: 'Cassette', description: 'Four-way ceiling cassette for shops, clinics and offices.', featured: false, image: '' },
+  { id: 4, name: 'Daikin FTKF35 Split AC', brand: 'Daikin', capacity: '1.0 Ton', type: 'Split', description: 'Inverter split with PM 2.5 filter and coanda airflow.', featured: false, image: '' },
+  { id: 5, name: 'Voltas 183V Vectra Split AC', brand: 'Voltas', capacity: '1.5 Ton', type: 'Split', description: 'Value 5 star inverter with turbo cooling mode.', featured: false, image: '' },
+  { id: 6, name: 'Hitachi Kashikoi 5100X', brand: 'Hitachi', capacity: '1.5 Ton', type: 'Split', description: 'Expandable inverter with self-cleaning front panel.', featured: false, image: '' },
 ]
 
 // ── AMC pricing, driving the public estimator (Admin → AMC Pricing) ──────

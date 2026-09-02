@@ -6,9 +6,21 @@
   background: #0d0d0d;
   overflow: hidden;
 }
+/* A dark floor under the image, so text at the bottom of the panel keeps its
+   contrast regardless of what the photograph is doing there. */
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.55) 0%, transparent 45%);
+  pointer-events: none;
+}
 .hero-bg {
   position: absolute;
   inset: 0;
+  /* Slow drift. Large enough to feel alive, small enough not to be noticed
+     as motion — which is the point. */
+  animation: heroDrift 26s ease-in-out infinite alternate;
   /* The image itself is set inline in Hero.jsx, because CSS cannot read
      Vite's base path and this deploys under a subpath on GitHub Pages. */
   background-size: cover;
@@ -30,41 +42,44 @@
 }
 .hero-content {
   position: relative;
-  z-index: 2;
-  max-width: 580px;
-  padding: 4rem 2.5rem 4rem 3rem;
+  z-index: 3;
+  max-width: 620px;
+  padding: 5rem 2.5rem 5rem 3.5rem;
 }
 .hero-tag {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  background: rgba(255, 255, 255, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.13);
+  border: 1px solid rgba(255, 255, 255, 0.28);
   color: white;
-  font-size: 12px;
-  font-weight: 500;
-  padding: 5px 14px;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 1.1px;
+  text-transform: uppercase;
+  padding: 7px 16px;
   border-radius: 20px;
-  margin-bottom: 1.5rem;
-  backdrop-filter: blur(4px);
+  margin-bottom: 1.75rem;
+  backdrop-filter: blur(6px);
 }
 .hero-headline {
-  font-size: clamp(36px, 6vw, 64px);
+  font-size: clamp(40px, 6.4vw, 72px);
   font-weight: 900;
   color: white;
-  line-height: 1.05;
-  letter-spacing: -1px;
-  margin-bottom: 1.25rem;
+  line-height: 1.02;
+  letter-spacing: -2px;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 2px 30px rgba(0, 0, 0, 0.3);
 }
 .hero-headline span {
   color: rgba(255, 255, 255, 0.6);
 }
 .hero p {
-  font-size: 16px;
-  color: rgba(255, 255, 255, 0.85);
-  line-height: 1.7;
-  margin-bottom: 2rem;
-  max-width: 420px;
+  font-size: 16.5px;
+  color: rgba(255, 255, 255, 0.86);
+  line-height: 1.75;
+  margin-bottom: 2.25rem;
+  max-width: 440px;
 }
 .hero-btns {
   display: flex;
@@ -74,33 +89,40 @@
 .btn-hero-primary {
   background: white;
   color: var(--red);
-  padding: 14px 28px;
-  border-radius: 8px;
+  padding: 16px 32px;
+  border-radius: 10px;
   font-size: 15px;
   font-weight: 700;
+  letter-spacing: 0.2px;
   text-decoration: none;
   display: flex;
   align-items: center;
-  gap: 8px;
-  transition: transform 0.2s, box-shadow 0.2s;
+  gap: 9px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s;
 }
 .btn-hero-primary:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
 }
 .btn-hero-secondary {
-  background: transparent;
+  background: rgba(255, 255, 255, 0.06);
   color: white;
-  border: 2px solid rgba(255, 255, 255, 0.5);
-  padding: 14px 28px;
-  border-radius: 8px;
+  border: 1.5px solid rgba(255, 255, 255, 0.45);
+  padding: 16px 32px;
+  border-radius: 10px;
   font-size: 15px;
   font-weight: 600;
+  letter-spacing: 0.2px;
   text-decoration: none;
   display: flex;
   align-items: center;
-  gap: 8px;
-  transition: background 0.2s, border-color 0.2s;
+  gap: 9px;
+  backdrop-filter: blur(6px);
+  transition: background 0.25s, border-color 0.25s, transform 0.25s;
+}
+.btn-hero-secondary:hover {
+  transform: translateY(-2px);
 }
 .btn-hero-secondary:hover {
   background: rgba(255, 255, 255, 0.1);
@@ -108,20 +130,24 @@
 }
 .hero-stats {
   display: flex;
-  gap: 32px;
-  margin-top: 3rem;
-  padding-top: 2rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  gap: 40px;
+  margin-top: 3.5rem;
+  padding-top: 2.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
 }
 .hero-stat .num {
-  font-size: 28px;
+  font-size: 34px;
   font-weight: 900;
   color: white;
+  letter-spacing: -1px;
+  line-height: 1;
 }
 .hero-stat .lbl {
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.6);
-  margin-top: 2px;
+  font-size: 11.5px;
+  color: rgba(255, 255, 255, 0.62);
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  margin-top: 7px;
 }
 
 .scroll-down {
@@ -137,6 +163,15 @@
   font-size: 11px;
   animation: bounce 2s infinite;
 }
+@keyframes heroDrift {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.07);
+  }
+}
+
 @keyframes bounce {
   0%,
   100% {
@@ -153,5 +188,12 @@
   }
   .hero-stats {
     gap: 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-bg,
+  .scroll-down {
+    animation: none;
   }
 }

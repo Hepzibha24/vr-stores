@@ -13,7 +13,7 @@ export default function Services() {
 
   return (
     <section className="section" id="services">
-      <div className="container">
+      <div className="container" data-reveal>
         <div className="eyebrow">What We Do</div>
         <h2 className="section-heading">Complete AC Solutions</h2>
         <p className="section-sub">

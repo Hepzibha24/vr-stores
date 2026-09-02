@@ -6,7 +6,7 @@ export default function Brands() {
 
   return (
     <section className="section bg-gray" id="brands">
-      <div className="container">
+      <div className="container" data-reveal>
         <div className="eyebrow">Multi-Brand Service</div>
         <h2 className="section-heading">Brands We Service</h2>
         <p className="section-sub">

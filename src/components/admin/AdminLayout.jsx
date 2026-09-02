@@ -12,6 +12,7 @@ const NAV = [
   { to: '/admin/enquiries', label: 'Enquiries', icon: 'ti-inbox', badge: 'newEnquiries' },
   { to: '/admin/bookings', label: 'AMC & Bookings', icon: 'ti-calendar-event' },
   { to: '/admin/content', label: 'Site Content', icon: 'ti-edit' },
+  { to: '/admin/models', label: 'AC Models', icon: 'ti-air-conditioning' },
   { to: '/admin/pricing', label: 'AMC Pricing', icon: 'ti-currency-rupee' },
   { to: '/admin/invoices', label: 'Invoice Generator', icon: 'ti-file-invoice' },
   { to: '/admin/cloud', label: 'Cloud Database', icon: 'ti-database' },

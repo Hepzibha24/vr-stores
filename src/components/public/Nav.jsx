@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { asset } from '../../lib/asset'
 import './Nav.css'
@@ -8,8 +9,19 @@ import './Nav.css'
  * The logo is the way in to the admin portal.
  */
 export default function Nav() {
+  const [condensed, setCondensed] = useState(false)
+
+  // Tightens once the page has moved, which hands a few vertical pixels back
+  // to the content and marks the header as pinned rather than in flow.
+  useEffect(() => {
+    const onScroll = () => setCondensed(window.scrollY > 24)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
   return (
-    <nav className="site-nav">
+    <nav className={`site-nav${condensed ? ' condensed' : ''}`}>
       <Link
         className="nav-logo"
         to="/admin"

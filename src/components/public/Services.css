@@ -1,16 +1,20 @@
 .services-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 16px;
-  margin-top: 3rem;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 18px;
+  margin-top: 3.5rem;
 }
 .service-card {
   background: white;
-  border: 1px solid #eee;
-  border-radius: 16px;
-  padding: 1.75rem 1.25rem;
+  border: 1px solid #ededed;
+  border-radius: 18px;
+  padding: 2.25rem 1.5rem;
   text-align: center;
-  transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+  /* Resting elevation, so the hover lift reads as a change of state rather
+     than the card appearing from nothing. */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 8px 24px rgba(0, 0, 0, 0.03);
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s,
+    border-color 0.3s;
   cursor: default;
   position: relative;
   overflow: hidden;
@@ -30,13 +34,13 @@
   transform: scaleX(1);
 }
 .service-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 20px 40px rgba(204, 0, 0, 0.1);
-  border-color: rgba(204, 0, 0, 0.2);
+  transform: translateY(-7px);
+  box-shadow: 0 22px 48px rgba(204, 0, 0, 0.13);
+  border-color: rgba(204, 0, 0, 0.22);
 }
 .service-icon {
-  width: 60px;
-  height: 60px;
+  width: 68px;
+  height: 68px;
   background: linear-gradient(135deg, #fff0f0, #ffe0e0);
   border-radius: 50%;
   display: flex;
@@ -45,19 +49,24 @@
   margin: 0 auto 1rem;
 }
 .service-icon i {
-  font-size: 26px;
+  font-size: 29px;
   color: var(--red);
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.service-card:hover .service-icon i {
+  transform: scale(1.12);
 }
 .service-card h3 {
-  font-size: 14px;
+  font-size: 15.5px;
   font-weight: 700;
   color: var(--text);
-  margin-bottom: 6px;
+  letter-spacing: -0.2px;
+  margin-bottom: 8px;
 }
 .service-card p {
-  font-size: 12px;
+  font-size: 12.75px;
   color: var(--muted);
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
 /* ── Feature strip ── */
@@ -65,10 +74,18 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 0;
-  border: 1px solid #eee;
-  border-radius: 16px;
+  border: 1px solid #ededed;
+  border-radius: 18px;
   overflow: hidden;
-  margin-top: 3rem;
+  margin-top: 3.5rem;
+  background: white;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 10px 30px rgba(0, 0, 0, 0.035);
+}
+.feature-item {
+  transition: background 0.25s;
+}
+.feature-item:hover {
+  background: #fffafa;
 }
 .feature-item {
   padding: 2rem 1.5rem;

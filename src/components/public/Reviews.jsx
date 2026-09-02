@@ -22,7 +22,7 @@ export default function Reviews() {
 
   return (
     <section className="section bg-gray" id="reviews">
-      <div className="container">
+      <div className="container" data-reveal>
         <div className="eyebrow">What Customers Say</div>
         <h2 className="section-heading">Reviews</h2>
         <p className="section-sub">

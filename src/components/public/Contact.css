@@ -1,101 +1,81 @@
-.contact-grid {
+/* ── Contact actions ──
+   One grid of cards, each a link. The address spans the row because it is the
+   longest value and would otherwise force the whole grid wider than it needs. */
+.contact-actions {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 40px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 14px;
   margin-top: 3rem;
-  align-items: start;
 }
-.contact-info {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-.contact-card {
+.caction {
   display: flex;
   align-items: center;
-  gap: 16px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  gap: 15px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.13);
   border-radius: 14px;
-  padding: 1.25rem 1.5rem;
+  padding: 1.15rem 1.4rem;
   text-decoration: none;
-  transition: background 0.2s, transform 0.2s;
+  transition: background 0.25s, border-color 0.25s, transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
 }
-.contact-card:hover {
-  background: rgba(255, 255, 255, 0.14);
-  transform: translateX(4px);
+.caction:hover {
+  background: rgba(255, 255, 255, 0.11);
+  border-color: rgba(255, 255, 255, 0.24);
+  transform: translateY(-3px);
 }
-.contact-card-icon {
-  width: 44px;
-  height: 44px;
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 10px;
+.caction-wide {
+  grid-column: 1 / -1;
+}
+.caction-icon {
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
+  transition: background 0.25s;
 }
-.contact-card-icon i {
+.caction-icon i {
   font-size: 22px;
-  color: white;
+  color: #fff;
 }
-.contact-card-text .label {
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.55);
-  font-weight: 600;
+.caction:hover .caction-icon {
+  background: var(--red);
+}
+.caction-whatsapp:hover .caction-icon {
+  background: #25d366;
+}
+.caction-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+.caction-text .label {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 1.1px;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 3px;
+  color: rgba(255, 255, 255, 0.5);
 }
-.contact-card-text .value {
+.caction-text .value {
   font-size: 15px;
-  color: white;
   font-weight: 600;
+  color: #fff;
   overflow-wrap: anywhere;
 }
-.contact-buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+.caction-go {
+  margin-left: auto;
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.28);
+  flex-shrink: 0;
+  transition: color 0.25s, transform 0.25s;
 }
-.cbtn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  padding: 16px;
-  border-radius: 10px;
-  font-size: 15px;
-  font-weight: 700;
-  text-decoration: none;
-  transition: all 0.2s;
-}
-.cbtn-white {
-  background: white;
-  color: var(--red);
-}
-.cbtn-white:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-}
-.cbtn-green {
-  background: #25d366;
-  color: white;
-}
-.cbtn-green:hover {
-  background: #1ebe5d;
-  transform: translateY(-2px);
-}
-.cbtn-ghost {
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-}
-.cbtn-ghost:hover {
-  background: rgba(255, 255, 255, 0.18);
-}
-.cbtn i {
-  font-size: 20px;
+.caction:hover .caction-go {
+  color: #fff;
+  transform: translate(2px, -2px);
 }
 
 /* ── Enquiry form ── */
@@ -274,7 +254,7 @@
 }
 
 @media (max-width: 768px) {
-  .contact-grid {
+  .contact-actions {
     grid-template-columns: 1fr;
   }
   .enquiry-box {

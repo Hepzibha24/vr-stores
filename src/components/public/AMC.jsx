@@ -36,7 +36,7 @@ export default function AMC() {
 
   return (
     <section className="section" id="amc">
-      <div className="container">
+      <div className="container" data-reveal>
         <div className="eyebrow">Annual Plans</div>
         <h2 className="section-heading">AMC — What&apos;s Included</h2>
         <p className="section-sub">

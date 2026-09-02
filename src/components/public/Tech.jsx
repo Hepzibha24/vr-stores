@@ -11,7 +11,7 @@ const POINTS = [
 export default function Tech() {
   return (
     <section className="section bg-gray">
-      <div className="container">
+      <div className="container" data-reveal>
         <div className="tech-section">
           <div className="tech-img">
             <img src={asset('technician.jpg')} alt="VR Store technician servicing an air conditioner" />

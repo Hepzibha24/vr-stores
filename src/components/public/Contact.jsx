@@ -30,77 +30,81 @@ export default function Contact() {
 
   return (
     <section className="section bg-dark" id="contact">
-      <div className="container">
+      <div className="container" data-reveal>
         <div className="eyebrow" style={{ color: 'rgba(204,0,0,0.9)' }}>
           Get In Touch
         </div>
         <h2 className="section-heading white">Ready to Book?</h2>
         <p className="section-sub white">Reach us via call, WhatsApp or email — we respond fast.</p>
 
-        <div className="contact-grid">
-          <div className="contact-info">
-            <a className="contact-card" href="tel:9940291467">
-              <div className="contact-card-icon">
-                <i className="ti ti-phone" />
-              </div>
-              <div className="contact-card-text">
-                <div className="label">Primary</div>
-                <div className="value">9940291467</div>
-              </div>
-            </a>
-            <a className="contact-card" href="tel:71200817516">
-              <div className="contact-card-icon">
-                <i className="ti ti-phone" />
-              </div>
-              <div className="contact-card-text">
-                <div className="label">Alternate</div>
-                <div className="value">71200817516</div>
-              </div>
-            </a>
-            <a className="contact-card" href="mailto:vrstores.airconditioner@gmail.com">
-              <div className="contact-card-icon">
-                <i className="ti ti-mail" />
-              </div>
-              <div className="contact-card-text">
-                <div className="label">Email</div>
-                <div className="value">vrstores.airconditioner@gmail.com</div>
-              </div>
-            </a>
-            <a
-              className="contact-card"
-              href="https://maps.app.goo.gl/yKGixWLWPscbxBky8"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <div className="contact-card-icon">
-                <i className="ti ti-map-pin" />
-              </div>
-              <div className="contact-card-text">
-                <div className="label">Address</div>
-                <div className="value">Rohini Nagar, Urapakkam West, TN 603211</div>
-              </div>
-            </a>
-          </div>
+        {/* One set of cards, each of which is the action. Previously the same
+            numbers appeared as read-only cards and again as buttons, which
+            made the reader check whether the two lists differed. */}
+        <div className="contact-actions">
+          <a className="caction" href="tel:9940291467">
+            <span className="caction-icon">
+              <i className="ti ti-phone" />
+            </span>
+            <span className="caction-text">
+              <span className="label">Call — primary</span>
+              <span className="value">9940291467</span>
+            </span>
+            <i className="ti ti-arrow-up-right caction-go" aria-hidden="true" />
+          </a>
 
-          <div className="contact-buttons">
-            <a className="cbtn cbtn-white" href="tel:9940291467">
-              <i className="ti ti-phone" /> Call 9940291467
-            </a>
-            <a className="cbtn cbtn-white" href="tel:71200817516">
-              <i className="ti ti-phone" /> Call 71200817516
-            </a>
-            <a
-              className="cbtn cbtn-green"
-              href="https://wa.me/919940291467"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <i className="ti ti-brand-whatsapp" /> WhatsApp Us
-            </a>
-            <a className="cbtn cbtn-ghost" href="mailto:vrstores.airconditioner@gmail.com">
-              <i className="ti ti-mail" /> Email Us
-            </a>
-          </div>
+          <a
+            className="caction caction-whatsapp"
+            href="https://wa.me/919940291467"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <span className="caction-icon">
+              <i className="ti ti-brand-whatsapp" />
+            </span>
+            <span className="caction-text">
+              <span className="label">WhatsApp</span>
+              <span className="value">Message us now</span>
+            </span>
+            <i className="ti ti-arrow-up-right caction-go" aria-hidden="true" />
+          </a>
+
+          <a className="caction" href="tel:71200817516">
+            <span className="caction-icon">
+              <i className="ti ti-phone" />
+            </span>
+            <span className="caction-text">
+              <span className="label">Call — alternate</span>
+              <span className="value">71200817516</span>
+            </span>
+            <i className="ti ti-arrow-up-right caction-go" aria-hidden="true" />
+          </a>
+
+          <a className="caction" href="mailto:vrstores.airconditioner@gmail.com">
+            <span className="caction-icon">
+              <i className="ti ti-mail" />
+            </span>
+            <span className="caction-text">
+              <span className="label">Email</span>
+              <span className="value">vrstores.airconditioner@gmail.com</span>
+            </span>
+            <i className="ti ti-arrow-up-right caction-go" aria-hidden="true" />
+          </a>
+
+          <a
+            className="caction caction-wide"
+            href="https://maps.app.goo.gl/yKGixWLWPscbxBky8"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <span className="caction-icon">
+              <i className="ti ti-map-pin" />
+            </span>
+            <span className="caction-text">
+              <span className="label">Showroom</span>
+              <span className="value">Rohini Nagar, Urapakkam West, Tamil Nadu 603211</span>
+            </span>
+            <i className="ti ti-arrow-up-right caction-go" aria-hidden="true" />
+          </a>
         </div>
 
         <div className="enquiry-box">

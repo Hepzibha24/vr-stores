@@ -3,7 +3,7 @@ import './Timings.css'
 export default function Timings() {
   return (
     <section className="section">
-      <div className="container">
+      <div className="container" data-reveal>
         <div className="eyebrow">Working Hours</div>
         <h2 className="section-heading">Store Timings</h2>
         <div className="timings-grid">

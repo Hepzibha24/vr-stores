@@ -1,0 +1,88 @@
+.fab-stack {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 90;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  /* Held off-screen rather than hidden, so the entrance has somewhere to
+     travel from and the buttons never flash in on load. */
+  opacity: 0;
+  transform: translateY(14px);
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.fab-stack.shown {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.fab {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  height: 52px;
+  padding: 0 15px;
+  border-radius: 26px;
+  color: #fff;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, gap 0.25s ease;
+}
+.fab i {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+/* The label unfurls on hover; on a touch screen the icon alone is the target,
+   which is why the icon is full size rather than shrinking to fit a label. */
+.fab span {
+  max-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  transition: max-width 0.25s ease;
+}
+.fab:hover,
+.fab:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28);
+  gap: 9px;
+}
+.fab:hover span,
+.fab:focus-visible span {
+  max-width: 110px;
+}
+.fab-whatsapp {
+  background: #25d366;
+}
+.fab-whatsapp:hover {
+  background: #1ebe5d;
+}
+.fab-call {
+  background: var(--red);
+}
+.fab-call:hover {
+  background: var(--red-dark);
+}
+
+@media (max-width: 768px) {
+  .fab-stack {
+    right: 14px;
+    bottom: 14px;
+  }
+  .fab {
+    height: 48px;
+    padding: 0 13px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fab-stack,
+  .fab,
+  .fab span {
+    transition: none;
+  }
+}
