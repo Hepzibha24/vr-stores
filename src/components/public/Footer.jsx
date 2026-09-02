@@ -49,7 +49,7 @@ export default function Footer() {
       </div>
       <div className="footer-bottom">
         <p>
-          © 2026 VR Store · O General Exclusive Authorised Dealer · Urapakkam West, Chengalpat, TN
+          © 2026 VR Store · O General Exclusive Authorised Dealer · Urapakkam West, Chengalpattu, TN
           603 211
         </p>
         <p>

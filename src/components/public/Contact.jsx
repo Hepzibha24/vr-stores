@@ -194,7 +194,7 @@ export default function Contact() {
               <p>
                 Plot No: 4, 1st Floor, Door No: 38, Rohini Nagar, Annai Anjugam Nagar,
                 <br />
-                Urapakkam West, Chengalpat District, Tamil Nadu – 603 211
+                Urapakkam West, Chengalpattu District, Tamil Nadu – 603 211
                 <br />
                 <a
                   href="https://maps.app.goo.gl/yKGixWLWPscbxBky8"
