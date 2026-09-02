@@ -68,13 +68,13 @@ export default function Contact() {
             <i className="ti ti-arrow-up-right caction-go" aria-hidden="true" />
           </a>
 
-          <a className="caction" href="tel:71200817516">
+          <a className="caction" href="tel:7200817516">
             <span className="caction-icon">
               <i className="ti ti-phone" />
             </span>
             <span className="caction-text">
               <span className="label">Call — alternate</span>
-              <span className="value">71200817516</span>
+              <span className="value">7200817516</span>
             </span>
             <i className="ti ti-arrow-up-right caction-go" aria-hidden="true" />
           </a>

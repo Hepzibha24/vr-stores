@@ -33,7 +33,7 @@ export default function Footer() {
               <a href="tel:9940291467">9940291467</a>
             </li>
             <li>
-              <a href="tel:71200817516">71200817516</a>
+              <a href="tel:7200817516">7200817516</a>
             </li>
             <li>
               <a href="mailto:vrstores.airconditioner@gmail.com">
