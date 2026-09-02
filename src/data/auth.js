@@ -17,7 +17,7 @@ const HASH_KEY = 'vrstore:admin-password-hash'
 
 // SHA-256 of the shipped default password. Documented in the README; change it
 // from the admin UI, which overwrites this in localStorage.
-const DEFAULT_PASSWORD_HASH = '9cd1ffb3bb71844b4f4b082a4b46ab64e82a52c37d6c0427f173346fdc45c7c6'
+const DEFAULT_PASSWORD_HASH = '0b0321f3dc313b465d26433789be4568fd8bad474fb450a1d2f17e90726b5a6f'
 
 /** Web Crypto is only available over https:// or on localhost. */
 export async function hashPassword(text) {
