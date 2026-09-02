@@ -15,11 +15,24 @@ export default function useReveal() {
     const nodes = document.querySelectorAll('[data-reveal]')
     if (!nodes.length) return undefined
 
+    const revealAll = () => nodes.forEach((n) => n.setAttribute('data-revealed', 'true'))
+
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     if (reducedMotion || !('IntersectionObserver' in window)) {
-      nodes.forEach((n) => n.setAttribute('data-revealed', 'true'))
+      revealAll()
       return undefined
     }
+
+    // Only now opt into hiding. The stylesheet keys off this class, so if the
+    // script never runs — or throws before this line — the page renders in
+    // full rather than blank. Hiding content that only JavaScript can bring
+    // back is a bad trade for an entrance animation.
+    document.documentElement.classList.add('reveal-ready')
+
+    // Belt and braces: some environments create the observer without ever
+    // delivering a callback. Anything still hidden after this is shown
+    // outright, so a failed animation costs the effect, not the content.
+    const failsafe = window.setTimeout(revealAll, 2500)
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -35,6 +48,9 @@ export default function useReveal() {
     )
 
     nodes.forEach((n) => observer.observe(n))
-    return () => observer.disconnect()
+    return () => {
+      window.clearTimeout(failsafe)
+      observer.disconnect()
+    }
   }, [])
 }

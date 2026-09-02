@@ -122,17 +122,18 @@ body {
 }
 
 /* ── Scroll reveal ──
-   Paired with useReveal.js. The default state is the visible one, so if the
-   script never runs the content is simply there rather than invisible. */
+   Paired with useReveal.js, which adds .reveal-ready to <html> only once it has
+   an observer running. Until then nothing is hidden, so a crawler, a failed
+   script or a blocked observer all get the full page rather than a blank one. */
 [data-reveal] {
   opacity: 1;
 }
 @media (prefers-reduced-motion: no-preference) {
-  [data-reveal]:not([data-revealed]) {
+  .reveal-ready [data-reveal]:not([data-revealed]) {
     opacity: 0;
     transform: translateY(22px);
   }
-  [data-reveal] {
+  .reveal-ready [data-reveal] {
     transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
       transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
   }
