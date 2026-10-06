@@ -679,6 +679,15 @@ table.data tbody tr.selected {
   color: var(--red-dark);
 }
 
+/* Confirmation, not warning. Same weight and position as .form-error so a
+   result lands in the same place whichever way it went. */
+.form-ok {
+  grid-column: 1 / -1;
+  font-size: 12px;
+  font-weight: 600;
+  color: #0f7b3f;
+}
+
 /* ── Content manager rows ── */
 .item-list {
   display: flex;

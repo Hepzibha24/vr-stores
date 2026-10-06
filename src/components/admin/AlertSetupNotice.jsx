@@ -1,16 +1,22 @@
+import { Link } from 'react-router-dom'
 import { emailConfigured, whatsappConfigured } from '../../data/store'
 
 /**
  * Shown until the alert channels are configured, so it is never a surprise that
  * notifications are not going out.
+ *
+ * It used to recite environment variable names and ask for a rebuild. That is
+ * not something the shop owner can act on, and it was also the advice that let
+ * the Supabase credentials go missing for a fortnight. It now points at the
+ * screen that does the job.
  */
 export default function AlertSetupNotice() {
-  if (emailConfigured && whatsappConfigured) return null
+  // Called, not read: the credentials can be saved while this page is open.
+  const email = emailConfigured()
+  const whatsapp = whatsappConfigured()
+  if (email && whatsapp) return null
 
-  const missing = [
-    !emailConfigured && 'email',
-    !whatsappConfigured && 'WhatsApp',
-  ].filter(Boolean)
+  const missing = [!email && 'Email', !whatsapp && 'WhatsApp'].filter(Boolean)
 
   return (
     <div className="notice">
@@ -20,24 +26,9 @@ export default function AlertSetupNotice() {
           {missing.join(' and ')} alert{missing.length > 1 ? 's are' : ' is'} not switched on yet
         </strong>
         <p>
-          Enquiries and bookings are still being saved and shown here — you just will not be
-          notified outside this page.
-          {!emailConfigured && (
-            <>
-              {' '}
-              For email, sign up at <code>emailjs.com</code> and set{' '}
-              <code>VITE_EMAILJS_SERVICE_ID</code>, <code>VITE_EMAILJS_TEMPLATE_ID</code> and{' '}
-              <code>VITE_EMAILJS_PUBLIC_KEY</code>.
-            </>
-          )}
-          {!whatsappConfigured && (
-            <>
-              {' '}
-              For WhatsApp, message the CallMeBot number from 9940291467 to get a key and set{' '}
-              <code>VITE_CALLMEBOT_APIKEY</code>.
-            </>
-          )}{' '}
-          Both go in a <code>.env</code> file, then restart the site. Full steps are in the README.
+          Enquiries and bookings are still saved and shown here — you just will not hear about them
+          anywhere else. <Link to="/admin/alerts">Set up alerts</Link> to get each one by{' '}
+          {missing.join(' and ').toLowerCase()} the moment it arrives.
         </p>
       </div>
     </div>

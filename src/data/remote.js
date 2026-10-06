@@ -25,6 +25,20 @@ const CONTENT_KEYS = {
   reviews: 'site_reviews',
 }
 
+/**
+ * Alert credentials, kept beside the content in public.settings.
+ *
+ * It has to live somewhere every visitor's browser can read, because the
+ * enquiry email is sent from the customer's own browser the moment they submit
+ * — not from a server. The settings table is already world-readable by design
+ * and this row holds nothing secret: all four values reach the page regardless,
+ * and EmailJS's allowed-origins list is what actually guards the quota.
+ *
+ * Separate from CONTENT_KEYS because it is one object, not an array of rows,
+ * and because it feeds notify.js rather than the page.
+ */
+const ALERTS_KEY = 'site_alerts'
+
 // PostgREST: upsert on primary-key conflict, and do not echo the row back.
 const UPSERT = 'resolution=merge-duplicates,return=minimal'
 const MINIMAL = 'return=minimal'
@@ -103,7 +117,7 @@ const rowToBooking = (r) => {
 
 /** Pulls everything the cloud knows about. Partial failures are reported per key. */
 export async function pullAll() {
-  const out = { ok: true, enquiries: null, bookings: null, content: {}, errors: [] }
+  const out = { ok: true, enquiries: null, bookings: null, content: {}, alerts: null, errors: [] }
   if (!remoteConfigured) return { ...out, ok: false, error: 'Supabase not configured' }
 
   // Enquiries and bookings are customer data: the RLS policies allow the
@@ -116,7 +130,9 @@ export async function pullAll() {
   const [msgs, bks, settings] = await Promise.all([
     signedIn ? rest('messages?select=*&order=created_at.desc') : null,
     signedIn ? rest('bookings?select=*&order=created_at.desc') : null,
-    rest(`settings?select=key,value&key=in.(${Object.values(CONTENT_KEYS).join(',')})`),
+    rest(
+      `settings?select=key,value&key=in.(${[...Object.values(CONTENT_KEYS), ALERTS_KEY].join(',')})`,
+    ),
   ])
 
   if (!signedIn) {
@@ -140,6 +156,10 @@ export async function pullAll() {
     for (const [field, key] of Object.entries(CONTENT_KEYS)) {
       const row = (settings.data || []).find((r) => r.key === key)
       if (row && Array.isArray(row.value)) out.content[field] = row.value
+    }
+    const alertRow = (settings.data || []).find((r) => r.key === ALERTS_KEY)
+    if (alertRow && alertRow.value && typeof alertRow.value === 'object') {
+      out.alerts = alertRow.value
     }
   } else {
     out.errors.push(`content: ${settings.error}`)
@@ -187,6 +207,15 @@ export function pushContent(field, rows) {
   return rest('settings', {
     method: 'POST',
     body: { key, value: rows, updated_at: new Date().toISOString() },
+    prefer: UPSERT,
+  })
+}
+
+/** Alert credentials. Writing needs a signed-in session; reading does not. */
+export function pushAlertConfig(config) {
+  return rest('settings', {
+    method: 'POST',
+    body: { key: ALERTS_KEY, value: config, updated_at: new Date().toISOString() },
     prefer: UPSERT,
   })
 }

@@ -23,9 +23,86 @@ const EMAILJS_ENDPOINT = 'https://api.emailjs.com/api/v1.0/email/send'
 const CALLMEBOT_ENDPOINT = 'https://api.callmebot.com/whatsapp.php'
 const STORE_EMAIL = 'vrstores.airconditioner@gmail.com'
 
-// All three EmailJS values are needed; a partial config would fail on every send.
-export const emailConfigured = Boolean(EMAILJS_SERVICE && EMAILJS_TEMPLATE && EMAILJS_PUBLIC_KEY)
-export const whatsappConfigured = Boolean(CALLMEBOT_KEY)
+/* ── Where the credentials come from ───────────────────────────────────────
+ *
+ * Build-time environment variables were the original plan and they are still
+ * honoured, but they cannot be the only route. Setting them on the host
+ * dashboard produces a build that looks fine and silently sends nothing, which
+ * is exactly how the Supabase credentials went missing for a fortnight. They
+ * also mean the shop owner cannot change a template without a developer.
+ *
+ * So the values are resolved at call time, newest source first:
+ *
+ *   1. whatever the admin saved (kept in the `site_alerts` settings row, which
+ *      every visitor's browser already reads, and mirrored into localStorage so
+ *      a send works before the first fetch returns)
+ *   2. VITE_* / config.js
+ *
+ * None of this is secret. The email is sent from the customer's own browser, so
+ * all four values reach the page whichever route they take — EmailJS's public
+ * key is named "public" for that reason. What stops a stranger spending the
+ * quota is the allowed-origins list in the EmailJS dashboard, not secrecy.
+ */
+
+export const ALERT_CONFIG_KEY = 'vrstore:alert-config'
+
+const FIELDS = ['serviceId', 'templateId', 'publicKey', 'callmebotKey', 'phone']
+
+function stored() {
+  try {
+    // Also throws under SSR, where there is no localStorage at all.
+    const raw = localStorage.getItem(ALERT_CONFIG_KEY)
+    const parsed = raw ? JSON.parse(raw) : null
+    return parsed && typeof parsed === 'object' ? parsed : {}
+  } catch {
+    return {}
+  }
+}
+
+let runtime = stored()
+
+/** Replaces the saved credentials. Called by the admin screen and by each pull. */
+export function setAlertConfig(next, { persist = true } = {}) {
+  runtime = {}
+  FIELDS.forEach((f) => {
+    const v = (next && next[f]) || ''
+    if (typeof v === 'string' && v.trim()) runtime[f] = v.trim()
+  })
+  if (!persist) return runtime
+  try {
+    localStorage.setItem(ALERT_CONFIG_KEY, JSON.stringify(runtime))
+  } catch {
+    /* private mode — the values still apply for this page view */
+  }
+  return runtime
+}
+
+/** The credentials actually in force, after the fallback chain. */
+export function alertConfig() {
+  return {
+    serviceId: runtime.serviceId || EMAILJS_SERVICE,
+    templateId: runtime.templateId || EMAILJS_TEMPLATE,
+    publicKey: runtime.publicKey || EMAILJS_PUBLIC_KEY,
+    callmebotKey: runtime.callmebotKey || CALLMEBOT_KEY,
+    phone: runtime.phone || CALLMEBOT_PHONE,
+  }
+}
+
+/** Only what the admin saved, for populating the settings form. */
+export function savedAlertConfig() {
+  return { ...runtime }
+}
+
+// Functions, not constants: the values can now arrive after the module loads.
+// All three EmailJS values are needed; a partial config fails on every send.
+export function emailConfigured() {
+  const c = alertConfig()
+  return Boolean(c.serviceId && c.templateId && c.publicKey)
+}
+
+export function whatsappConfigured() {
+  return Boolean(alertConfig().callmebotKey)
+}
 
 /* ── Email (EmailJS) ───────────────────────────────────────────────────── */
 
@@ -38,12 +115,16 @@ export const whatsappConfigured = Boolean(CALLMEBOT_KEY)
  * names here in sync with the template in the EmailJS dashboard — see README.
  */
 async function postEmail(params) {
-  if (!emailConfigured) {
+  const cfg = alertConfig()
+  if (!emailConfigured()) {
+    const missing = [
+      !cfg.serviceId && 'Service ID',
+      !cfg.templateId && 'Template ID',
+      !cfg.publicKey && 'Public Key',
+    ].filter(Boolean)
     return {
       ok: false,
-      error:
-        'EmailJS is not fully configured (needs VITE_EMAILJS_SERVICE_ID, ' +
-        'VITE_EMAILJS_TEMPLATE_ID and VITE_EMAILJS_PUBLIC_KEY).',
+      error: `EmailJS is not set up yet — missing ${missing.join(', ')}. Add it under Email & WhatsApp Alerts in the admin.`,
     }
   }
   try {
@@ -51,9 +132,9 @@ async function postEmail(params) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        service_id: EMAILJS_SERVICE,
-        template_id: EMAILJS_TEMPLATE,
-        user_id: EMAILJS_PUBLIC_KEY,
+        service_id: cfg.serviceId,
+        template_id: cfg.templateId,
+        user_id: cfg.publicKey,
         template_params: params,
       }),
     })
@@ -112,12 +193,16 @@ export function sendBookingEmail(booking) {
  * WhatsApp is the nudge.
  */
 async function postWhatsApp(text) {
-  if (!whatsappConfigured) {
-    return { ok: false, error: 'No CallMeBot API key configured (VITE_CALLMEBOT_APIKEY).' }
+  const cfg = alertConfig()
+  if (!whatsappConfigured()) {
+    return {
+      ok: false,
+      error: 'No CallMeBot API key yet — add it under Email & WhatsApp Alerts in the admin.',
+    }
   }
   const url =
-    `${CALLMEBOT_ENDPOINT}?phone=${encodeURIComponent(CALLMEBOT_PHONE)}` +
-    `&text=${encodeURIComponent(text)}&apikey=${encodeURIComponent(CALLMEBOT_KEY)}`
+    `${CALLMEBOT_ENDPOINT}?phone=${encodeURIComponent(cfg.phone)}` +
+    `&text=${encodeURIComponent(text)}&apikey=${encodeURIComponent(cfg.callmebotKey)}`
   try {
     await fetch(url, { mode: 'no-cors' })
     return { ok: true }
@@ -154,4 +239,34 @@ export function sendBookingWhatsApp(booking) {
     `Preferred date: ${clip(booking.requestedDate, 20)}`,
   ]
   return postWhatsApp(lines.join('\n'))
+}
+
+/* ── Test sends ────────────────────────────────────────────────────────────
+ *
+ * The whole point of the setup screen: prove the credentials work before a real
+ * customer depends on them. These go through the same code path as a genuine
+ * enquiry, so a pass here means a real enquiry will arrive too.
+ */
+
+export function sendTestEmail() {
+  return postEmail({
+    to_email: STORE_EMAIL,
+    subject: 'Test alert — VR Store website',
+    enquiry_type: 'Test',
+    name: 'Test message',
+    phone: '9940291467',
+    email: STORE_EMAIL,
+    reply_to: STORE_EMAIL,
+    service: 'Setup check',
+    message:
+      'If this reached your inbox, enquiry alerts are working. ' +
+      'Sent from the admin portal to confirm the EmailJS settings.',
+    received: new Date().toLocaleString('en-IN'),
+  })
+}
+
+export function sendTestWhatsApp() {
+  return postWhatsApp(
+    '✅ Test alert — VR Store\nIf you got this, WhatsApp alerts for new enquiries are working.',
+  )
 }

@@ -20,7 +20,10 @@ import {
 } from '../../components/admin/ui'
 import AlertSetupNotice from '../../components/admin/AlertSetupNotice'
 
-const ALERTS_ON = [emailConfigured && 'emailed', whatsappConfigured && 'WhatsApped'].filter(Boolean)
+// Computed per render, not once at module load: the alert credentials can be
+// saved from the settings screen while the admin is already open.
+const alertsOn = () =>
+  [emailConfigured() && 'emailed', whatsappConfigured() && 'WhatsApped'].filter(Boolean)
 
 export default function AdminBookings() {
   const bookings = useBookings()
@@ -57,7 +60,7 @@ export default function AdminBookings() {
         <h1>AMC &amp; Service Bookings</h1>
         <p>
           AMC sign-ups and service requests raised from the site
-          {ALERTS_ON.length ? `, also ${ALERTS_ON.join(' and ')} to the store as they arrive.` : '.'}
+          {alertsOn().length ? `, also ${alertsOn().join(' and ')} to the store as they arrive.` : '.'}
         </p>
       </div>
 

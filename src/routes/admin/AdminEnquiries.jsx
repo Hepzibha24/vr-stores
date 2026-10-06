@@ -20,7 +20,10 @@ import {
 } from '../../components/admin/ui'
 import AlertSetupNotice from '../../components/admin/AlertSetupNotice'
 
-const ALERTS_ON = [emailConfigured && 'emailed', whatsappConfigured && 'WhatsApped'].filter(Boolean)
+// Computed per render, not once at module load: the alert credentials can be
+// saved from the settings screen while the admin is already open.
+const alertsOn = () =>
+  [emailConfigured() && 'emailed', whatsappConfigured() && 'WhatsApped'].filter(Boolean)
 
 export default function AdminEnquiries() {
   const enquiries = useEnquiries()
@@ -57,7 +60,7 @@ export default function AdminEnquiries() {
         <h1>Enquiries</h1>
         <p>
           Every contact-form submission from the public site
-          {ALERTS_ON.length ? `, also ${ALERTS_ON.join(' and ')} to the store as it arrives.` : '.'}
+          {alertsOn().length ? `, also ${alertsOn().join(' and ')} to the store as it arrives.` : '.'}
         </p>
       </div>
 

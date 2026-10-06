@@ -33,6 +33,7 @@ import {
   sendBookingWhatsApp,
   sendEnquiryEmail,
   sendEnquiryWhatsApp,
+  setAlertConfig,
   whatsappConfigured,
 } from './notify'
 import {
@@ -50,6 +51,7 @@ import {
   patchBooking,
   patchEnquiry,
   pullAll,
+  pushAlertConfig,
   pushBooking,
   pullCatalogue,
   pushContent,
@@ -216,6 +218,12 @@ export async function syncFromCloud({ force = false } = {}) {
   setSync({ status: 'syncing', error: '' })
 
   const [result, catalogue] = await Promise.all([pullAll(), pullCatalogue()])
+
+  // Before any early return. A visitor's browser needs these to send the
+  // enquiry email, and it has no session, so the rest of this sync is partly
+  // refused by design — that must not cost us the credentials.
+  if (result.alerts) setAlertConfig(result.alerts)
+
   if (!result.ok && !result.enquiries && !result.bookings) {
     const blocked = result.authRequired || /sign in to the database/i.test((result.errors || []).join(' '))
     setSync({
@@ -263,6 +271,36 @@ export async function syncFromCloud({ force = false } = {}) {
   return { ok: true }
 }
 
+/**
+ * Saves the alert credentials: locally first so they work immediately, then up
+ * to Supabase so every visitor's browser gets them too.
+ *
+ * The upload needs a signed-in Supabase session. Without one the alerts work
+ * only in this browser — enough to test from the admin, not enough for a real
+ * customer's enquiry — so that case is reported rather than passed off as done.
+ */
+export async function saveAlertConfig(config) {
+  const saved = setAlertConfig(config)
+  // The credentials live outside the store document, so nothing would re-render
+  // on its own. An empty commit hands every subscriber a fresh snapshot, which
+  // is what clears the "alerts are not switched on" notice straight away.
+  commit(() => ({}))
+  if (!remoteEnabled) {
+    return { ok: false, localOnly: true, error: 'No database configured — saved in this browser only.' }
+  }
+  const result = await pushAlertConfig(saved)
+  if (!result.ok) {
+    return {
+      ok: false,
+      localOnly: true,
+      error: result.authRequired
+        ? 'Saved in this browser only — sign in under Cloud Database to apply it to the live site.'
+        : result.error,
+    }
+  }
+  return { ok: true }
+}
+
 /** Pushes the current site content up, e.g. after an admin edit. */
 function mirrorContent(field) {
   mirror(() => pushContent(field, ensure()[field]))
@@ -282,7 +320,7 @@ const CHANNELS = {
   email: {
     statusKey: 'emailStatus',
     errorKey: 'emailError',
-    configured: () => emailConfigured,
+    configured: () => emailConfigured(),
     // EmailJS tells us whether it actually accepted the message.
     okStatus: 'sent',
     send: (collection, record) =>
@@ -291,7 +329,7 @@ const CHANNELS = {
   whatsapp: {
     statusKey: 'waStatus',
     errorKey: 'waError',
-    configured: () => whatsappConfigured,
+    configured: () => whatsappConfigured(),
     // CallMeBot's response is opaque to the browser — see notify.js.
     okStatus: 'unconfirmed',
     send: (collection, record) =>

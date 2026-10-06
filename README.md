@@ -88,18 +88,26 @@ values from their dashboard:
    Save, then copy the **Template ID**.
 3. **Account → General** → copy the **Public Key**.
 
-Then:
+Then enter them in the admin — **Email & WhatsApp Alerts**:
 
-4. Copy `.env.example` to a new file called `.env` in this folder.
-5. Fill in all three:
-   ```
-   VITE_EMAILJS_SERVICE_ID=service_xxxxxxx
-   VITE_EMAILJS_TEMPLATE_ID=template_xxxxxxx
-   VITE_EMAILJS_PUBLIC_KEY=xxxxxxxxxxxxxxx
-   ```
-6. Restart the site (`Ctrl+C`, then `npm run dev` again). Vite only reads `.env` on startup.
-7. Send yourself a test enquiry from the contact form and check the inbox — including spam
-   the first time.
+4. Sign in to the portal, open **Cloud Database** and sign in there too. Without a database
+   session the settings save in that one browser only, which is enough to test and not
+   enough for a customer.
+5. Open **Email & WhatsApp Alerts**, paste the three values, press **Save**.
+6. Press **Send test email** and check the inbox — including spam, the first time.
+
+No rebuild and no redeploy: the values are stored in the `site_alerts` row of
+`public.settings`, which every visitor's browser already reads. That matters because the
+email is sent from the *customer's* browser when they submit the form, not from a server.
+
+`VITE_EMAILJS_*` still works and still wins where set, so an environment variable can
+override the saved values. It is no longer the recommended route — setting one against the
+wrong environment produces a build that looks correct and silently sends nothing, which is
+exactly how the Supabase credentials went missing for a fortnight.
+
+**Lock the key to the site.** In EmailJS, **Account → Security**, add
+`https://www.vrstores.in` to the allowed origins. The public key necessarily reaches every
+visitor's browser, so the allow-list is what stops a stranger spending the monthly quota.
 
 All three values are required; leave any one blank and email alerts stay off. The variable
 names in the template must match the ones above — they are set in
