@@ -3,6 +3,7 @@ import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-do
 import { currentUser, logout } from '../../data/auth'
 import { useEnquiries, useSync } from '../../data/StoreContext'
 import useFavicon from './useFavicon'
+import useTitle from './useTitle'
 import { asset } from '../../lib/asset'
 import SyncBadge from './SyncBadge'
 import './admin.css'
@@ -28,6 +29,12 @@ export default function AdminLayout() {
   const badges = { newEnquiries: enquiries.filter((e) => e.status === 'New').length }
 
   useFavicon(asset('admin-mark.svg'))
+
+  // Longest matching path wins, so /admin/enquiries beats the /admin dashboard
+  // entry rather than both matching on the prefix.
+  const section = NAV.filter((n) => location.pathname === n.to || (!n.end && location.pathname.startsWith(n.to)))
+    .sort((a, b) => b.to.length - a.to.length)[0]
+  useTitle(`${section ? section.label : 'Admin'} · VR Store Admin`)
 
   // Close the mobile drawer whenever the route changes.
   useEffect(() => setMenuOpen(false), [location.pathname])

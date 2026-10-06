@@ -2,7 +2,12 @@
 <html lang="en-IN">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="./logo.png" />
+    <!-- Absolute, not "./logo.png". A relative icon href resolves against the
+         current route, so on /admin/login it asked for /admin/logo.png and
+         404'd — the tab icon vanished on every route but the home page. -->
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
 
     <!-- Title leads with what people actually type ("AC service", "AC sales")
@@ -35,8 +40,19 @@
       content="Air conditioner sales, installation, repair, gas filling, deep cleaning and AMC in Urapakkam. Same-day service, all brands. Call 9940291467."
     />
     <meta property="og:url" content="https://www.vrstores.in/" />
-    <meta property="og:image" content="https://www.vrstores.in/logo.png" />
+    <!-- A 1200x630 card, not the logo. twitter:card below asks for the wide
+         format, and a 230x240 logo in that slot renders as a smudge or gets
+         dropped — on WhatsApp, where these links actually travel, that is the
+         difference between a preview and a bare URL. -->
+    <meta property="og:image" content="https://www.vrstores.in/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="VR Store — AC sales and service in Urapakkam, Chengalpattu. Call 9940291467."
+    />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://www.vrstores.in/og-image.jpg" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -44,9 +60,12 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap"
       rel="stylesheet"
     />
+    <!-- Pinned, not @latest. Every icon on the site came from whatever that
+         tag happened to point at, so an upstream rename could blank all 81 of
+         them with no deploy on our side and no way to tell what changed. -->
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"
+      href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.49.0/tabler-icons.min.css"
     />
 
     <!--

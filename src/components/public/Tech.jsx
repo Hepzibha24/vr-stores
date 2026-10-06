@@ -14,7 +14,13 @@ export default function Tech() {
       <div className="container" data-reveal>
         <div className="tech-section">
           <div className="tech-img">
-            <img src={asset('technician.jpg')} alt="VR Store technician servicing an air conditioner" />
+            <img
+              src={asset('technician.jpg')}
+              alt="VR Store technician servicing an air conditioner"
+              width="736"
+              height="736"
+              loading="lazy"
+            />
             <div className="tech-img-overlay" />
           </div>
           <div className="tech-content">

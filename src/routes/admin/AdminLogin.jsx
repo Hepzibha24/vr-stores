@@ -4,6 +4,7 @@ import { isAuthenticated, login } from '../../data/auth'
 import useFavicon from '../../components/admin/useFavicon'
 import { asset } from '../../lib/asset'
 import '../../components/admin/admin.css'
+import useTitle from '../../components/admin/useTitle'
 
 export default function AdminLogin() {
   const navigate = useNavigate()
@@ -15,6 +16,7 @@ export default function AdminLogin() {
   const [busy, setBusy] = useState(false)
 
   useFavicon(asset('admin-mark.svg'))
+  useTitle('Sign In · VR Store Admin')
 
   // Web Crypto (used to hash the password) is unavailable on plain http://
   // outside localhost, which would make every login fail for no visible reason.
