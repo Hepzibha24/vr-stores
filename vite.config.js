@@ -39,6 +39,23 @@ function buildInfo(env) {
   }
 }
 
+/**
+ * The date the site last actually changed, as an ISO day.
+ *
+ * Google ignores <priority> and <changefreq> — it has said so publicly — but it
+ * does use <lastmod> where the value looks trustworthy. Trustworthy means it
+ * moves when the content moves, so this is the last commit's date rather than
+ * the build clock: a rebuild that changed nothing should not claim the page is
+ * new, and a sitemap that cries wolf gets its lastmod ignored entirely.
+ */
+function lastModified() {
+  try {
+    return execSync('git log -1 --format=%cs').toString().trim()
+  } catch {
+    return new Date().toISOString().slice(0, 10)
+  }
+}
+
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
   // loadEnv merges .env files with the real environment. Reading process.env
@@ -63,6 +80,34 @@ export default defineConfig(({ mode }) => {
               injectTo: 'head',
             },
           ]
+        },
+      },
+      {
+        // Written at build time so <lastmod> cannot go stale in a committed
+        // file that nobody remembers to touch.
+        name: 'sitemap',
+        apply: 'build',
+        generateBundle() {
+          const lastmod = lastModified()
+          this.emitFile({
+            type: 'asset',
+            fileName: 'sitemap.xml',
+            source:
+              `<?xml version="1.0" encoding="UTF-8"?>
+` +
+              `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+` +
+              `  <url>
+` +
+              `    <loc>https://www.vrstores.in/</loc>
+` +
+              `    <lastmod>${lastmod}</lastmod>
+` +
+              `  </url>
+` +
+              `</urlset>
+`,
+          })
         },
       },
       {
