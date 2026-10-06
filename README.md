@@ -120,11 +120,24 @@ names in the template must match the ones above — they are set in
 
 From the phone that owns **9940291467**:
 
-1. Save **+34 644 51 95 23** as a contact (that's CallMeBot).
+1. Save **+34 623 75 84 18** as a contact (that's CallMeBot). Saving it first matters —
+   WhatsApp does not deliver reliably to an unsaved number.
 2. WhatsApp it exactly: `I allow callmebot to send me messages`
-3. It replies with your API key.
-4. Put it in the same `.env` file: `VITE_CALLMEBOT_APIKEY=your-key`
-5. Restart the site.
+3. It replies *"API Activated for your phone number. Your APIKEY is ……"*. No reply within
+   two minutes means it did not take, and CallMeBot asks you to wait **24 hours** before
+   retrying — so get the wording right first time.
+4. Paste the key into the admin under **Email & WhatsApp Alerts**, along with the number to
+   alert in full international form (`+919940291467`). A key only works for the number it
+   was issued to.
+5. Press **Send test WhatsApp** and check the phone.
+
+The activation number is from CallMeBot's own page; re-check it at
+<https://www.callmebot.com/blog/free-api-whatsapp-messages/> before passing it on.
+
+**Their free API is documented as personal use only.** Alerting a shop about customer
+enquiries is arguably not that. The practical risk is that it stops working without notice,
+which is why email is the channel of record and this is only the nudge. Their page points at
+textmebot.com and Twilio as the paid alternatives.
 
 You'll then get a short WhatsApp per enquiry with the name, phone, service and message.
 

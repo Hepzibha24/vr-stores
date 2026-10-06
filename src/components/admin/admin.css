@@ -679,6 +679,23 @@ table.data tbody tr.selected {
   color: var(--red-dark);
 }
 
+/* Numbered steps inside a field hint, where the order genuinely matters —
+   CallMeBot will not issue a key if the contact was never saved first. */
+.setup-steps {
+  margin: 0.5rem 0 0.6rem;
+  padding-left: 1.15rem;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.65;
+}
+.setup-steps li {
+  margin-bottom: 0.35rem;
+}
+.setup-steps li::marker {
+  color: var(--red);
+  font-weight: 700;
+}
+
 /* Confirmation, not warning. Same weight and position as .form-error so a
    result lands in the same place whichever way it went. */
 .form-ok {

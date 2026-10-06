@@ -11,6 +11,16 @@ import {
 import { signedInAs } from '../../data/supabaseAuth'
 
 const STORE_EMAIL = 'vrstores.airconditioner@gmail.com'
+const DEFAULT_PHONE = '+919940291467'
+
+// CallMeBot's activation number, from their own documentation. Verify it at
+// callmebot.com/blog/free-api-whatsapp-messages before changing it — sending
+// the owner to message the wrong number is worse than leaving WhatsApp off.
+const CALLMEBOT_NUMBER = '+34 623 75 84 18'
+
+// +<country><number>, 8–15 digits. Deliberately loose: it catches a missing
+// country code and a pasted "9940291467", not every malformed number.
+const PHONE_RE = /^\+[1-9]\d{7,14}$/
 
 /**
  * Where the shop owner switches enquiry alerts on.
@@ -31,7 +41,7 @@ export default function AdminAlerts() {
     templateId: saved.templateId || '',
     publicKey: saved.publicKey || '',
     callmebotKey: saved.callmebotKey || '',
-    phone: saved.phone || '',
+    phone: saved.phone || DEFAULT_PHONE,
   })
   const [status, setStatus] = useState(null)
   const [test, setTest] = useState(null)
@@ -44,9 +54,17 @@ export default function AdminAlerts() {
 
   async function handleSave(e) {
     e.preventDefault()
+    const phone = form.phone.replace(/[\s-]/g, '')
+    if (form.callmebotKey.trim() && !PHONE_RE.test(phone)) {
+      setStatus({
+        kind: 'warn',
+        text: `That number needs a country code — ${DEFAULT_PHONE}, not 9940291467.`,
+      })
+      return
+    }
     setBusy(true)
     setTest(null)
-    const result = await saveAlertConfig(form)
+    const result = await saveAlertConfig({ ...form, phone })
     setStatus(
       result.ok
         ? { kind: 'ok', text: 'Saved. Alerts are live for everyone who visits the site.' }
@@ -151,9 +169,27 @@ export default function AdminAlerts() {
           <div className="field full">
             <h3 style={{ margin: '0.75rem 0 0', fontSize: '0.95rem' }}>WhatsApp (CallMeBot)</h3>
             <small>
-              Optional, and a nudge rather than a record — CallMeBot never confirms delivery. From
-              9940291467, WhatsApp <code>+34 644 51 95 23</code> with the words{' '}
-              <code>I allow callmebot to send me messages</code> and it replies with a key.
+              Optional, and a nudge rather than a record — CallMeBot never confirms delivery, so
+              email stays the channel you rely on. Do this from <strong>9940291467</strong>, the
+              phone you want alerted:
+            </small>
+            <ol className="setup-steps">
+              <li>
+                Save <code>{CALLMEBOT_NUMBER}</code> in your contacts — any name. WhatsApp will not
+                deliver to an unsaved number reliably.
+              </li>
+              <li>
+                WhatsApp that contact the exact words{' '}
+                <code>I allow callmebot to send me messages</code>
+              </li>
+              <li>
+                It replies <em>&ldquo;API Activated for your phone number. Your APIKEY is
+                ……&rdquo;</em> — that number goes in the box below.
+              </li>
+            </ol>
+            <small>
+              No reply within two minutes means it did not take, and CallMeBot asks you to wait{' '}
+              <strong>24 hours</strong> before trying again — so get the wording right first time.
             </small>
           </div>
 
@@ -164,8 +200,10 @@ export default function AdminAlerts() {
               value={form.callmebotKey}
               onChange={set('callmebotKey')}
               placeholder="123456"
+              inputMode="numeric"
               autoComplete="off"
             />
+            <small>Digits only, from the activation reply.</small>
           </div>
 
           <div className="field full">
@@ -174,10 +212,13 @@ export default function AdminAlerts() {
               id="al-phone"
               value={form.phone}
               onChange={set('phone')}
-              placeholder="+919940291467"
+              placeholder={DEFAULT_PHONE}
               autoComplete="off"
             />
-            <small>With the country code. Must be the number that asked CallMeBot for the key.</small>
+            <small>
+              With the country code, e.g. <code>{DEFAULT_PHONE}</code>. It must be the same phone
+              that asked CallMeBot for the key — a key only works for the number it was issued to.
+            </small>
           </div>
 
           {status && (
@@ -222,7 +263,7 @@ export default function AdminAlerts() {
       <div className="panel" style={{ maxWidth: 620 }}>
         <div className="panel-head">
           <div>
-            <h2>Two things that will catch you out</h2>
+            <h2>Three things that will catch you out</h2>
           </div>
         </div>
         <div style={{ padding: '0 1.25rem 1.25rem' }}>
@@ -240,6 +281,21 @@ export default function AdminAlerts() {
             <em>To</em> field to {STORE_EMAIL} and its <em>Reply-To</em> to{' '}
             <code>{'{{reply_to}}'}</code>, so replying in Gmail reaches the customer. A name that
             does not match arrives blank rather than failing.
+          </p>
+          <p style={{ marginBottom: '0.75rem' }}>
+            <strong>CallMeBot&apos;s free tier says personal use.</strong> Their own page states
+            the free API is for personal use, and alerting a shop about customer enquiries is
+            arguably not that. In practice the worst case is that it quietly stops working, which
+            is why email is the channel of record and this one is only the nudge. If WhatsApp
+            alerts become something you depend on, their page points at{' '}
+            <a href="https://textmebot.com" target="_blank" rel="noreferrer">
+              textmebot.com
+            </a>{' '}
+            and{' '}
+            <a href="https://www.twilio.com" target="_blank" rel="noreferrer">
+              Twilio
+            </a>{' '}
+            as the paid routes.
           </p>
           {!signedIn && remoteEnabled && (
             <p>
